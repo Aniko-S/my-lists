@@ -13,7 +13,7 @@ function SignIn() {
   return (
     <>
       {isUserLoggedIn && <Navigate to="/home"></Navigate>}
-      <div className="w-100 h-100 d-flex align-items-center justify-content-center">
+      <div className="w-100 h-100 d-flex align-items-center justify-content-center sign-in-container">
         <div className="box">
           <h2 className="pb-5">Bejelentkezés</h2>
           <form onSubmit={(e) => handleSignIn(e, email, password)}>
