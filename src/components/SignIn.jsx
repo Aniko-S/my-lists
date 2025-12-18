@@ -2,16 +2,18 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../store/AuthContext";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config/firebase";
+import { Navigate } from "react-router";
 
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSigningIn, setIsSigningIn] = useState(false);
 
-  const { handleSignIn } = useContext(AuthContext);
+  const { handleSignIn, isUserLoggedIn } = useContext(AuthContext);
 
   return (
     <>
+      {isUserLoggedIn && <Navigate to="/home"></Navigate>}
       <div className="box">
         <h2 className="pb-5">Bejelentkezés</h2>
         <form onSubmit={(e) => handleSignIn(e, email, password)}>
