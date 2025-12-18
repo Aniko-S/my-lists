@@ -1,7 +1,9 @@
+import ShoppingList from "./ShoppingList";
+
 function Home() {
   return (
     <>
-      <div>Home</div>
+      <ShoppingList></ShoppingList>
     </>
   );
 }
