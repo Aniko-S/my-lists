@@ -7,40 +7,43 @@ import Sidebar from "./components/Sidebar";
 import ShoppingList from "./components/ShoppingList";
 import TodoList from "./components/TodoList";
 import EventList from "./components/EventList";
+import { DataContextProvider } from "./store/DataContext";
 
 function App() {
   return (
     <>
       <AuthContextProvider>
-        <Router>
-          <Routes>
-            <Route
-              path="/shopping-list"
-              element={
-                <Sidebar>
-                  <ShoppingList></ShoppingList>
-                </Sidebar>
-              }
-            ></Route>
-            <Route
-              path="/todo-list"
-              element={
-                <Sidebar>
-                  <TodoList></TodoList>
-                </Sidebar>
-              }
-            ></Route>
-            <Route
-              path="/event-list"
-              element={
-                <Sidebar>
-                  <EventList></EventList>
-                </Sidebar>
-              }
-            ></Route>
-            <Route path="" element={<SignIn></SignIn>}></Route>
-          </Routes>
-        </Router>
+        <DataContextProvider>
+          <Router>
+            <Routes>
+              <Route
+                path="/shopping-list"
+                element={
+                  <Sidebar>
+                    <ShoppingList></ShoppingList>
+                  </Sidebar>
+                }
+              ></Route>
+              <Route
+                path="/todo-list"
+                element={
+                  <Sidebar>
+                    <TodoList></TodoList>
+                  </Sidebar>
+                }
+              ></Route>
+              <Route
+                path="/event-list"
+                element={
+                  <Sidebar>
+                    <EventList></EventList>
+                  </Sidebar>
+                }
+              ></Route>
+              <Route path="" element={<SignIn></SignIn>}></Route>
+            </Routes>
+          </Router>
+        </DataContextProvider>
       </AuthContextProvider>
     </>
   );
