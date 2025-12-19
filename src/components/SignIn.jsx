@@ -1,7 +1,5 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../store/AuthContext";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../config/firebase";
 import { Navigate } from "react-router";
 
 function SignIn() {
@@ -12,7 +10,7 @@ function SignIn() {
 
   return (
     <>
-      {isUserLoggedIn && <Navigate to="/home"></Navigate>}
+      {isUserLoggedIn && <Navigate to="/shopping-list"></Navigate>}
       <div className="w-100 h-100 d-flex align-items-center justify-content-center sign-in-container">
         <div className="box">
           <h2 className="pb-5">Bejelentkezés</h2>

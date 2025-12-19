@@ -6,4 +6,4 @@ function TodoList() {
   );
 }
 
-export default Todo;
+export default TodoList;

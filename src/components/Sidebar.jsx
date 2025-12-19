@@ -6,7 +6,6 @@ import {
   Drawer,
   IconButton,
   List,
-  ListItem,
   ListItemButton,
   ListItemText,
   Toolbar,
@@ -15,10 +14,11 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { Link } from "react-router";
 
 const drawerWidth = 240;
 
-function Sidebar(props) {
+function Sidebar({ children }) {
   const [isClosing, setIsClosing] = useState(false);
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
   const [isShoppingListCollapseOpen, setIsShoppingListCollapseOpen] =
@@ -33,9 +33,9 @@ function Sidebar(props) {
       isOpen: isShoppingListCollapseOpen,
       setIsOpen: setIsShoppingListCollapseOpen,
       lists: [
-        { id: 11, title: "list 1" },
-        { id: 12, title: "list 2" },
-        { id: 13, title: "list 3" },
+        { id: 11, title: "list 1", type: "shopping-list" },
+        { id: 12, title: "list 2", type: "shopping-list" },
+        { id: 13, title: "list 3", type: "shopping-list" },
       ],
     },
     {
@@ -44,9 +44,9 @@ function Sidebar(props) {
       isOpen: isTodoListCollapseOpen,
       setIsOpen: setIsTodoListCollapseOpen,
       lists: [
-        { id: 21, title: "list 1" },
-        { id: 22, title: "list 2" },
-        { id: 23, title: "list 3" },
+        { id: 21, title: "list 1", type: "todo-list" },
+        { id: 22, title: "list 2", type: "todo-list" },
+        { id: 23, title: "list 3", type: "todo-list" },
       ],
     },
     {
@@ -55,9 +55,9 @@ function Sidebar(props) {
       isOpen: isEventListCollapseOpen,
       setIsOpen: setIsEventListCollapseOpen,
       lists: [
-        { id: 31, title: "list 1" },
-        { id: 32, title: "list 2" },
-        { id: 33, title: "list 3" },
+        { id: 31, title: "list 1", type: "event-list" },
+        { id: 32, title: "list 2", type: "event-list" },
+        { id: 33, title: "list 3", type: "event-list" },
       ],
     },
   ];
@@ -96,7 +96,12 @@ function Sidebar(props) {
                 <List component="div" disablePadding>
                   {listGroup.lists.map((item) => {
                     return (
-                      <ListItemButton sx={{ pl: 4 }} key={item.id}>
+                      <ListItemButton
+                        sx={{ pl: 4 }}
+                        key={item.id}
+                        component={Link}
+                        to={`/${item.type}`}
+                      >
                         <ListItemText primary={item.title}></ListItemText>
                       </ListItemButton>
                     );
@@ -187,21 +192,7 @@ function Sidebar(props) {
           }}
         >
           <Toolbar />
-          <Typography sx={{ marginBottom: 2 }}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
-            dolor purus non enim praesent elementum facilisis leo vel. Risus at
-            ultrices mi tempus imperdiet. Semper risus in hendrerit gravida
-            rutrum quisque non tellus. Convallis convallis tellus id interdum
-            velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean
-            sed adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies
-            integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
-            eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo
-            quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
-            vivamus at augue. At augue eget arcu dictum varius duis at
-            consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-            donec massa sapien faucibus et molestie ac.
-          </Typography>
+          {children}
         </Box>
       </Box>
     </>
