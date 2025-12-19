@@ -1,12 +1,12 @@
-import { useContext, useState } from "react";
-import { AuthContext } from "../store/AuthContext";
+import { useState } from "react";
+import { useAuth } from "../store/AuthContext";
 import { Navigate } from "react-router";
 
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { handleSignIn, isUserLoggedIn } = useContext(AuthContext);
+  const { handleSignIn, isUserLoggedIn } = useAuth();
 
   return (
     <>
