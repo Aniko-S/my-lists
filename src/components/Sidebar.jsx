@@ -15,7 +15,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { Link } from "react-router";
-import { useData } from "../store/DataContext";
+import { useMenu } from "../store/MenuContext";
 
 const drawerWidth = 240;
 
@@ -23,7 +23,7 @@ function Sidebar({ children }) {
   const [isClosing, setIsClosing] = useState(false);
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
 
-  const { menuList } = useData();
+  const { menuList } = useMenu();
 
   const handleDrawerToggle = () => {
     if (!isClosing) {

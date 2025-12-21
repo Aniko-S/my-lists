@@ -3,43 +3,55 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { db } from "../config/firebase";
 import { useAuth } from "./AuthContext";
 
-const DataContext = createContext();
+const MenuContext = createContext();
 
-export function useData() {
-  return useContext(DataContext);
+export function useMenu() {
+  return useContext(MenuContext);
 }
 
-export const DataContextProvider = ({ children }) => {
+export const MenuContextProvider = ({ children }) => {
   const [isShoppingListCollapseOpen, setIsShoppingListCollapseOpen] =
     useState(true);
   const [isTodoListCollapseOpen, setIsTodoListCollapseOpen] = useState(true);
   const [isEventListCollapseOpen, setIsEventListCollapseOpen] = useState(true);
 
   const [shoppingLists, setShoppingLists] = useState([]);
+  const [todoLists, setTodoLists] = useState([]);
+  const [eventLists, setEventLists] = useState([]);
 
-  const collectionRef = collection(db, "shopping-list");
   const { user } = useAuth();
 
   useEffect(() => {
+    return getLists("shopping-list", setShoppingLists);
+  }, [user]);
+
+  useEffect(() => {
+    return getLists("todo-list", setTodoLists);
+  }, [user]);
+
+  useEffect(() => {
+    return getLists("event-list", setEventLists);
+  }, [user]);
+
+  const getLists = (path, setter) => {
+    const collectionRef = collection(db, path);
     const q = query(collectionRef, where("creatorId", "==", user?.uid || ""));
     const getDataUnsub = onSnapshot(
       q,
       (snapShot) => {
-        console.log(snapShot);
         const data = snapShot.docs.map((doc) => ({
           ...doc.data(),
           id: doc.id,
         }));
 
-        setShoppingLists(data);
-        console.log(data);
+        setter(data);
       },
       (error) => {
         console.log(error);
       }
     );
     return () => getDataUnsub();
-  }, [user]);
+  };
 
   const menuList = [
     {
@@ -54,26 +66,18 @@ export const DataContextProvider = ({ children }) => {
       title: "Tennivalók",
       isOpen: isTodoListCollapseOpen,
       setIsOpen: setIsTodoListCollapseOpen,
-      lists: [
-        { id: 21, title: "list 1", type: "todo-list" },
-        { id: 22, title: "list 2", type: "todo-list" },
-        { id: 23, title: "list 3", type: "todo-list" },
-      ],
+      lists: todoLists,
     },
     {
       id: 3,
       title: "Események",
       isOpen: isEventListCollapseOpen,
       setIsOpen: setIsEventListCollapseOpen,
-      lists: [
-        { id: 31, title: "list 1", type: "event-list" },
-        { id: 32, title: "list 2", type: "event-list" },
-        { id: 33, title: "list 3", type: "event-list" },
-      ],
+      lists: eventLists,
     },
   ];
 
   const ctxValue = { menuList };
 
-  return <DataContext value={ctxValue}>{children}</DataContext>;
+  return <MenuContext value={ctxValue}>{children}</MenuContext>;
 };

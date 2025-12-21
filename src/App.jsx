@@ -7,13 +7,13 @@ import Sidebar from "./components/Sidebar";
 import ShoppingList from "./components/ShoppingList";
 import TodoList from "./components/TodoList";
 import EventList from "./components/EventList";
-import { DataContextProvider } from "./store/DataContext";
+import { MenuContextProvider } from "./store/MenuContext";
 
 function App() {
   return (
     <>
       <AuthContextProvider>
-        <DataContextProvider>
+        <MenuContextProvider>
           <Router>
             <Routes>
               <Route
@@ -43,7 +43,7 @@ function App() {
               <Route path="" element={<SignIn></SignIn>}></Route>
             </Routes>
           </Router>
-        </DataContextProvider>
+        </MenuContextProvider>
       </AuthContextProvider>
     </>
   );
