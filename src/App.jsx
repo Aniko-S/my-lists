@@ -17,7 +17,7 @@ function App() {
           <Router>
             <Routes>
               <Route
-                path="/shopping-list"
+                path="/shopping-list/:id"
                 element={
                   <Sidebar>
                     <ShoppingList></ShoppingList>

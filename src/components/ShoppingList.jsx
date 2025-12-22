@@ -1,4 +1,37 @@
+import { collection, onSnapshot, query } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { db } from "../config/firebase";
+import { useParams } from "react-router";
+
 function ShoppingList() {
+  const [itemList, setItemList] = useState([]);
+  const params = useParams();
+  const id = params.id;
+
+  useEffect(() => {
+    if (!id) {
+      return;
+    }
+    const collectionRef = collection(db, `shopping-list/${id}/items`);
+    const q = query(collectionRef);
+    const getDataUnsub = onSnapshot(
+      q,
+      (snapShot) => {
+        const data = snapShot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+
+        setItemList(data);
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+    return () => getDataUnsub();
+  }, [id]);
+
   return (
     <>
       <h2>Bevásárlólista</h2>
@@ -10,18 +43,29 @@ function ShoppingList() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>alma</td>
-            <td>élelmiszerbolt</td>
-          </tr>
-          <tr>
-            <td>C-vitamin</td>
-            <td>gyógyszertár</td>
-          </tr>
-          <tr>
-            <td>pelenka</td>
-            <td>drogéria</td>
-          </tr>
+          {itemList.map((item) => {
+            return (
+              <tr key={item.id}>
+                <td>
+                  <input
+                    id={item.id}
+                    type="checkbox"
+                    checked={item.checked}
+                    className="form-check-input"
+                  ></input>
+                  <label
+                    htmlFor={item.id}
+                    className={
+                      "form-check-label" + (item.checked ? " checked" : "")
+                    }
+                  >
+                    {item.name}
+                  </label>
+                </td>
+                <td>{item.store}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </>

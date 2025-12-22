@@ -64,7 +64,7 @@ function Sidebar({ children }) {
                         sx={{ pl: 4 }}
                         key={item.id}
                         component={Link}
-                        to={`/${item.type}`}
+                        to={`/${item.type}/${item.id}`}
                       >
                         <ListItemText primary={item.title}></ListItemText>
                       </ListItemButton>
