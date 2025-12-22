@@ -1,5 +1,6 @@
 import {
   collection,
+  deleteDoc,
   doc,
   onSnapshot,
   query,
@@ -8,6 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import { db } from "../config/firebase";
 import { useParams } from "react-router";
+import { Delete } from "@mui/icons-material";
 
 function ShoppingList() {
   const [itemList, setItemList] = useState([]);
@@ -48,14 +50,25 @@ function ShoppingList() {
     }
   };
 
+  const deleteProduct = async (id) => {
+    const docRef = doc(collectionRef, id);
+
+    try {
+      await deleteDoc(docRef);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <h2>Bevásárlólista</h2>
-      <table className="table">
+      <table className="table table-hover">
         <thead>
           <tr>
             <th>Termék</th>
             <th>Lelőhely</th>
+            <th>Műveletek</th>
           </tr>
         </thead>
         <tbody>
@@ -80,6 +93,9 @@ function ShoppingList() {
                   </label>
                 </td>
                 <td>{item.store}</td>
+                <td>
+                  <Delete onClick={() => deleteProduct(item.id)}></Delete>
+                </td>
               </tr>
             );
           })}
