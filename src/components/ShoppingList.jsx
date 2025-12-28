@@ -10,38 +10,46 @@ import { useEffect, useState } from "react";
 import { db } from "../config/firebase";
 import { useParams } from "react-router";
 import { Delete } from "@mui/icons-material";
+import { useData } from "../store/DataContext";
 
 function ShoppingList() {
+  const [list, setList] = useState();
   const [itemList, setItemList] = useState([]);
   const params = useParams();
   const id = params.id;
-  const collectionRef = collection(db, `shopping-list/${id}/items`);
+  const itemCollectionRef = collection(db, `shopping-list/${id}/items`);
+  const path = "shopping-list";
+
+  const { setListSnapshot, setItemListSnapshot } = useData();
 
   useEffect(() => {
     if (!id) {
       return;
     }
 
-    const q = query(collectionRef);
-    const getDataUnsub = onSnapshot(
-      q,
-      (snapShot) => {
-        const data = snapShot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
+    const onSuccess = (data) => {
+      setList(data);
+    };
 
-        setItemList(data);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    const getDataUnsub = setListSnapshot(path, id, onSuccess);
+    return () => getDataUnsub();
+  }, [id]);
+
+  useEffect(() => {
+    if (!id) {
+      return;
+    }
+
+    const onSuccess = (data) => {
+      setItemList(data);
+    };
+
+    const getDataUnsub = setItemListSnapshot(path, id, onSuccess);
     return () => getDataUnsub();
   }, [id]);
 
   const updateProduct = async (event, id) => {
-    const docRef = doc(collectionRef, id);
+    const docRef = doc(itemCollectionRef, id);
 
     try {
       await updateDoc(docRef, { checked: event.target.checked });
@@ -51,7 +59,7 @@ function ShoppingList() {
   };
 
   const deleteProduct = async (id) => {
-    const docRef = doc(collectionRef, id);
+    const docRef = doc(itemCollectionRef);
 
     try {
       await deleteDoc(docRef);
@@ -62,7 +70,7 @@ function ShoppingList() {
 
   return (
     <>
-      <h2>Bevásárlólista</h2>
+      <h2>{list?.title}</h2>
       <table className="table table-hover">
         <thead>
           <tr>
