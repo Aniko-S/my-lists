@@ -3,47 +3,44 @@ import "./style.css";
 import { AuthContextProvider } from "./store/AuthContext";
 import { Route, BrowserRouter as Router, Routes } from "react-router";
 import SignIn from "./components/SignIn";
-import Sidebar from "./components/Sidebar";
 import ShoppingList from "./components/ShoppingList";
 import TodoList from "./components/TodoList";
 import EventList from "./components/EventList";
-import { MenuContextProvider } from "./store/MenuContext";
+import Menu from "./components/Menu/Menu";
 
 function App() {
   return (
     <>
       <AuthContextProvider>
-        <MenuContextProvider>
-          <Router>
-            <Routes>
-              <Route
-                path="/shopping-list/:id"
-                element={
-                  <Sidebar>
-                    <ShoppingList></ShoppingList>
-                  </Sidebar>
-                }
-              ></Route>
-              <Route
-                path="/todo-list"
-                element={
-                  <Sidebar>
-                    <TodoList></TodoList>
-                  </Sidebar>
-                }
-              ></Route>
-              <Route
-                path="/event-list"
-                element={
-                  <Sidebar>
-                    <EventList></EventList>
-                  </Sidebar>
-                }
-              ></Route>
-              <Route path="" element={<SignIn></SignIn>}></Route>
-            </Routes>
-          </Router>
-        </MenuContextProvider>
+        <Router>
+          <Routes>
+            <Route
+              path="/shopping-list/:id"
+              element={
+                <Menu>
+                  <ShoppingList></ShoppingList>
+                </Menu>
+              }
+            ></Route>
+            <Route
+              path="/todo-list"
+              element={
+                <Menu>
+                  <TodoList></TodoList>
+                </Menu>
+              }
+            ></Route>
+            <Route
+              path="/event-list"
+              element={
+                <Menu>
+                  <EventList></EventList>
+                </Menu>
+              }
+            ></Route>
+            <Route path="" element={<SignIn></SignIn>}></Route>
+          </Routes>
+        </Router>
       </AuthContextProvider>
     </>
   );

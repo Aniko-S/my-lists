@@ -1,15 +1,12 @@
 import { collection, query, where, onSnapshot } from "firebase/firestore";
-import { createContext, useContext, useEffect, useState } from "react";
-import { db } from "../config/firebase";
-import { useAuth } from "./AuthContext";
+import { useEffect, useState } from "react";
+import { db } from "../../config/firebase";
+import { useAuth } from "../../store/AuthContext";
+import { Collapse, List, ListItemButton, ListItemText } from "@mui/material";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { Link } from "react-router";
 
-const MenuContext = createContext();
-
-export function useMenu() {
-  return useContext(MenuContext);
-}
-
-export const MenuContextProvider = ({ children }) => {
+function MenuData() {
   const [isShoppingListCollapseOpen, setIsShoppingListCollapseOpen] =
     useState(true);
   const [isTodoListCollapseOpen, setIsTodoListCollapseOpen] = useState(true);
@@ -77,7 +74,46 @@ export const MenuContextProvider = ({ children }) => {
     },
   ];
 
-  const ctxValue = { menuList };
+  return (
+    <>
+      <div style={{ backgroundColor: "#cce7c9", height: "100%" }}>
+        <List>
+          {menuList.map((listGroup) => {
+            return (
+              <div key={listGroup.id}>
+                <ListItemButton
+                  onClick={() => listGroup.setIsOpen(!listGroup.isOpen)}
+                >
+                  <ListItemText primary={listGroup.title}></ListItemText>
+                  {listGroup.isOpen ? (
+                    <ExpandLess></ExpandLess>
+                  ) : (
+                    <ExpandMore></ExpandMore>
+                  )}
+                </ListItemButton>
+                <Collapse in={listGroup.isOpen} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    {listGroup.lists.map((item) => {
+                      return (
+                        <ListItemButton
+                          sx={{ pl: 4 }}
+                          key={item.id}
+                          component={Link}
+                          to={`/${item.type}/${item.id}`}
+                        >
+                          <ListItemText primary={item.title}></ListItemText>
+                        </ListItemButton>
+                      );
+                    })}
+                  </List>
+                </Collapse>
+              </div>
+            );
+          })}
+        </List>
+      </div>
+    </>
+  );
+}
 
-  return <MenuContext value={ctxValue}>{children}</MenuContext>;
-};
+export default MenuData;
