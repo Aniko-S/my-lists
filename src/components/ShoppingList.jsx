@@ -16,14 +16,14 @@ function ShoppingList() {
   const [list, setList] = useState();
   const [itemList, setItemList] = useState([]);
   const params = useParams();
-  const id = params.id;
-  const itemCollectionRef = collection(db, `shopping-list/${id}/items`);
+  const listId = params.id;
+  const itemCollectionRef = collection(db, `shopping-list/${listId}/items`);
   const path = "shopping-list";
 
-  const { setListSnapshot, setItemListSnapshot } = useData();
+  const { setListSnapshot, setItemListSnapshot, deleteItem } = useData();
 
   useEffect(() => {
-    if (!id) {
+    if (!listId) {
       return;
     }
 
@@ -31,12 +31,12 @@ function ShoppingList() {
       setList(data);
     };
 
-    const getDataUnsub = setListSnapshot(path, id, onSuccess);
+    const getDataUnsub = setListSnapshot(path, listId, onSuccess);
     return () => getDataUnsub();
-  }, [id]);
+  }, [listId]);
 
   useEffect(() => {
-    if (!id) {
+    if (!listId) {
       return;
     }
 
@@ -44,25 +44,19 @@ function ShoppingList() {
       setItemList(data);
     };
 
-    const getDataUnsub = setItemListSnapshot(path, id, onSuccess);
+    const getDataUnsub = setItemListSnapshot(path, listId, onSuccess);
     return () => getDataUnsub();
-  }, [id]);
+  }, [listId]);
 
-  const updateProduct = async (event, id) => {
-    const docRef = doc(itemCollectionRef, id);
+  const deleteProduct = (itemId) => {
+    deleteItem(path, listId, itemId);
+  };
+
+  const updateProduct = async (event, listId) => {
+    const docRef = doc(itemCollectionRef, listId);
 
     try {
       await updateDoc(docRef, { checked: event.target.checked });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const deleteProduct = async (id) => {
-    const docRef = doc(itemCollectionRef);
-
-    try {
-      await deleteDoc(docRef);
     } catch (error) {
       console.log(error);
     }

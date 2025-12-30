@@ -1,5 +1,6 @@
 import {
   collection,
+  deleteDoc,
   doc,
   getDoc,
   onSnapshot,
@@ -51,7 +52,18 @@ export const DataContextProvider = ({ children }) => {
     );
   };
 
-  const ctxValue = { setListSnapshot, setItemListSnapshot };
+  const deleteItem = async (path, listId, itemId) => {
+    const docRef = doc(collection(db, `${path}/${listId}/items`), itemId);
+    console.log(docRef);
+
+    try {
+      await deleteDoc(docRef);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const ctxValue = { setListSnapshot, setItemListSnapshot, deleteItem };
 
   return <DataContext value={ctxValue}>{children}</DataContext>;
 };
