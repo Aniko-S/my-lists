@@ -1,4 +1,5 @@
 import {
+  addDoc,
   collection,
   deleteDoc,
   doc,
@@ -17,7 +18,10 @@ export function useData() {
 }
 
 export const DataContextProvider = ({ children }) => {
-  const setListSnapshot = (path, id, onSuccess) => {
+  const [isShowItemModal, setIsShowItemModal] = useState(false);
+  const [itemModalTitle, setItemModalTitle] = useState("");
+
+  const setListDataSnapshot = (path, id, onSuccess) => {
     const docRef = doc(collection(db, path), id);
     const q = query(docRef);
     return onSnapshot(
@@ -63,7 +67,26 @@ export const DataContextProvider = ({ children }) => {
     }
   };
 
-  const ctxValue = { setListSnapshot, setItemListSnapshot, deleteItem };
+  const createItem = async (path, item, listId) => {
+    const collectionRef = collection(db, `${path}/${listId}/items`);
+    try {
+      addDoc(collectionRef, item);
+      console.log(collectionRef, item);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const ctxValue = {
+    isShowItemModal,
+    setIsShowItemModal,
+    itemModalTitle,
+    setItemModalTitle,
+    setListDataSnapshot,
+    setItemListSnapshot,
+    deleteItem,
+    createItem,
+  };
 
   return <DataContext value={ctxValue}>{children}</DataContext>;
 };

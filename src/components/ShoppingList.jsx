@@ -11,6 +11,8 @@ import { db } from "../config/firebase";
 import { useParams } from "react-router";
 import { Delete } from "@mui/icons-material";
 import { useData } from "../store/DataContext";
+import ItemModal from "./ItemModal";
+import ShoppingListItem from "./ShoppingListItem";
 
 function ShoppingList() {
   const [list, setList] = useState();
@@ -20,7 +22,12 @@ function ShoppingList() {
   const itemCollectionRef = collection(db, `shopping-list/${listId}/items`);
   const path = "shopping-list";
 
-  const { setListSnapshot, setItemListSnapshot, deleteItem } = useData();
+  const {
+    setIsShowItemModal,
+    setListDataSnapshot,
+    setItemListSnapshot,
+    deleteItem,
+  } = useData();
 
   useEffect(() => {
     if (!listId) {
@@ -31,7 +38,7 @@ function ShoppingList() {
       setList(data);
     };
 
-    const getDataUnsub = setListSnapshot(path, listId, onSuccess);
+    const getDataUnsub = setListDataSnapshot(path, listId, onSuccess);
     return () => getDataUnsub();
   }, [listId]);
 
@@ -62,8 +69,15 @@ function ShoppingList() {
     }
   };
 
+  const handleNewItem = () => {
+    setIsShowItemModal(true);
+  };
+
   return (
     <>
+      <ItemModal>
+        <ShoppingListItem></ShoppingListItem>
+      </ItemModal>
       <h2>{list?.title}</h2>
       <table className="table table-hover">
         <thead>
@@ -103,6 +117,9 @@ function ShoppingList() {
           })}
         </tbody>
       </table>
+      <button className="btn btn-success" onClick={handleNewItem}>
+        Tétel hozzáadása
+      </button>
     </>
   );
 }
