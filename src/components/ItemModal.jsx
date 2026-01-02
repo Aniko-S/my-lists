@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import CloseButton from "react-bootstrap/CloseButton";
 
-function ItemModal({ children, id }) {
+function ItemModal({ children }) {
   const { isShowItemModal, setIsShowItemModal, itemModalTitle } = useData();
 
   const handleClose = () => {

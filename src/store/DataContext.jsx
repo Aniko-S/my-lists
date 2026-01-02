@@ -6,6 +6,7 @@ import {
   getDoc,
   onSnapshot,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { createContext, useContext, useState } from "react";
@@ -58,7 +59,6 @@ export const DataContextProvider = ({ children }) => {
 
   const deleteItem = async (path, listId, itemId) => {
     const docRef = doc(collection(db, `${path}/${listId}/items`), itemId);
-    console.log(docRef);
 
     try {
       await deleteDoc(docRef);
@@ -67,11 +67,31 @@ export const DataContextProvider = ({ children }) => {
     }
   };
 
-  const createItem = async (path, item, listId) => {
+  const createItem = async (path, listId, item) => {
     const collectionRef = collection(db, `${path}/${listId}/items`);
     try {
-      addDoc(collectionRef, item);
-      console.log(collectionRef, item);
+      await addDoc(collectionRef, item);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateItem = async (path, listId, itemId, updatedItem) => {
+    const docRef = doc(collection(db, `${path}/${listId}/items`), itemId);
+
+    try {
+      await updateDoc(docRef, updatedItem);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getItemById = async (path, listId, itemId, setter = () => {}) => {
+    const docRef = doc(collection(db, `${path}/${listId}/items`), itemId);
+
+    try {
+      const snapShot = await getDoc(docRef);
+      setter(snapShot.data());
     } catch (error) {
       console.log(error);
     }
@@ -86,6 +106,8 @@ export const DataContextProvider = ({ children }) => {
     setItemListSnapshot,
     deleteItem,
     createItem,
+    updateItem,
+    getItemById,
   };
 
   return <DataContext value={ctxValue}>{children}</DataContext>;

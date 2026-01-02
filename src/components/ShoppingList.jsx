@@ -1,15 +1,6 @@
-import {
-  collection,
-  deleteDoc,
-  doc,
-  onSnapshot,
-  query,
-  updateDoc,
-} from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { db } from "../config/firebase";
 import { useParams } from "react-router";
-import { Delete } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import { useData } from "../store/DataContext";
 import ItemModal from "./ItemModal";
 import ShoppingListItem from "./ShoppingListItem";
@@ -17,9 +8,10 @@ import ShoppingListItem from "./ShoppingListItem";
 function ShoppingList() {
   const [list, setList] = useState();
   const [itemList, setItemList] = useState([]);
+  const [editItemId, setEditItemId] = useState("");
+
   const params = useParams();
   const listId = params.id;
-  const itemCollectionRef = collection(db, `shopping-list/${listId}/items`);
   const path = "shopping-list";
 
   const {
@@ -27,6 +19,7 @@ function ShoppingList() {
     setListDataSnapshot,
     setItemListSnapshot,
     deleteItem,
+    updateItem,
   } = useData();
 
   useEffect(() => {
@@ -55,28 +48,32 @@ function ShoppingList() {
     return () => getDataUnsub();
   }, [listId]);
 
-  const deleteProduct = (itemId) => {
+  const handleDeleteItem = (itemId) => {
     deleteItem(path, listId, itemId);
-  };
-
-  const updateProduct = async (event, listId) => {
-    const docRef = doc(itemCollectionRef, listId);
-
-    try {
-      await updateDoc(docRef, { checked: event.target.checked });
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const handleNewItem = () => {
     setIsShowItemModal(true);
   };
 
+  const handleUpdateItem = (id) => {
+    setEditItemId(id);
+    setIsShowItemModal(true);
+  };
+
+  const handleCheck = (event, id) => {
+    updateItem(path, listId, id, { checked: event.target.checked });
+  };
+
   return (
     <>
       <ItemModal>
-        <ShoppingListItem></ShoppingListItem>
+        <ShoppingListItem
+          id={editItemId}
+          onUnmount={() => {
+            setEditItemId(null);
+          }}
+        ></ShoppingListItem>
       </ItemModal>
       <h2>{list?.title}</h2>
       <table className="table table-hover">
@@ -97,7 +94,7 @@ function ShoppingList() {
                     type="checkbox"
                     checked={item.checked}
                     className="form-check-input"
-                    onChange={(e) => updateProduct(e, item.id)}
+                    onChange={(e) => handleCheck(e, item.id)}
                   ></input>
                   <label
                     htmlFor={item.id}
@@ -110,7 +107,8 @@ function ShoppingList() {
                 </td>
                 <td>{item.store}</td>
                 <td>
-                  <Delete onClick={() => deleteProduct(item.id)}></Delete>
+                  <Edit onClick={() => handleUpdateItem(item.id)}></Edit>
+                  <Delete onClick={() => handleDeleteItem(item.id)}></Delete>
                 </td>
               </tr>
             );
