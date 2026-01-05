@@ -12,6 +12,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import DrawerOnMobile from "./DrawerOnMobile";
 import DrawerOnDesktop from "./DrawerOnDesktop";
 import MenuData from "./MenuData";
+import Modal from "../Modal";
 
 const drawerWidth = 240;
 
@@ -27,6 +28,7 @@ function Menu({ children }) {
 
   return (
     <>
+      <Modal></Modal>
       <Box sx={{ display: "flex" }}>
         <CssBaseline></CssBaseline>
         <AppBar

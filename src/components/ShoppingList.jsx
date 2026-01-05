@@ -4,7 +4,6 @@ import { Delete, Edit } from "@mui/icons-material";
 import { useData } from "../store/DataContext";
 import ShoppingListItem from "./ShoppingListItem";
 import CreateList from "./CreateList";
-import Modal from "./Modal";
 
 function ShoppingList() {
   const [list, setList] = useState();
@@ -28,12 +27,6 @@ function ShoppingList() {
       return;
     }
 
-    if (listId == "new") {
-      setModalBody(<CreateList></CreateList>);
-      setIsShowModal(true);
-      return;
-    }
-
     const onSuccess = (data) => {
       setList(data);
     };
@@ -43,7 +36,7 @@ function ShoppingList() {
   }, [listId]);
 
   useEffect(() => {
-    if (!listId || listId == "new") {
+    if (!listId) {
       return;
     }
 
@@ -75,7 +68,6 @@ function ShoppingList() {
 
   return (
     <>
-      <Modal></Modal>
       <h2>{list?.title}</h2>
       <table className="table table-hover">
         <thead>

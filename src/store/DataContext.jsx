@@ -11,6 +11,7 @@ import {
 } from "firebase/firestore";
 import { createContext, useContext, useState } from "react";
 import { db } from "../config/firebase";
+import { useAuth } from "./AuthContext";
 
 const DataContext = createContext();
 
@@ -22,6 +23,8 @@ export const DataContextProvider = ({ children }) => {
   const [isShowModal, setIsShowModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [modalBody, setModalBody] = useState(<></>);
+
+  const { user } = useAuth();
 
   const setListDataSnapshot = (path, id, onSuccess) => {
     const docRef = doc(collection(db, path), id);
@@ -98,6 +101,22 @@ export const DataContextProvider = ({ children }) => {
     }
   };
 
+  const createList = async (path, title) => {
+    const collectionRef = collection(db, path);
+    const item = {
+      title: title,
+      creatorId: user?.uid,
+      type: path,
+    };
+    try {
+      const newDoc = await addDoc(collectionRef, item);
+      setIsShowModal(false);
+      return newDoc.id;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const ctxValue = {
     isShowModal,
     setIsShowModal,
@@ -111,6 +130,7 @@ export const DataContextProvider = ({ children }) => {
     createItem,
     updateItem,
     getItemById,
+    createList,
   };
 
   return <DataContext value={ctxValue}>{children}</DataContext>;

@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import { db } from "../../config/firebase";
 import { useAuth } from "../../store/AuthContext";
 import { Collapse, List, ListItemButton, ListItemText } from "@mui/material";
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { Add, ExpandLess, ExpandMore } from "@mui/icons-material";
 import { Link } from "react-router";
+import { useData } from "../../store/DataContext";
+import CreateList from "../CreateList";
 
 function MenuData() {
   const [isShoppingListCollapseOpen, setIsShoppingListCollapseOpen] =
@@ -17,6 +19,7 @@ function MenuData() {
   const [eventLists, setEventLists] = useState([]);
 
   const { user } = useAuth();
+  const { setIsShowModal, setModalBody } = useData();
 
   useEffect(() => {
     return getLists("shopping-list", setShoppingLists);
@@ -29,6 +32,11 @@ function MenuData() {
   useEffect(() => {
     return getLists("event-list", setEventLists);
   }, [user]);
+
+  const handleCreateList = (type) => {
+    setIsShowModal(true);
+    setModalBody(<CreateList defaultType={type}></CreateList>);
+  };
 
   const getLists = (path, setter) => {
     const collectionRef = collection(db, path);
@@ -100,8 +108,16 @@ function MenuData() {
                       sx={{ pl: 4 }}
                       key="new"
                       component={Link}
-                      to={`/${listGroup.path}/new`}
+                      onClick={() => handleCreateList(listGroup.path)}
                     >
+                      <Add
+                        color="success"
+                        style={{
+                          stroke: "green",
+                          strokeWidth: "2",
+                          margin: "0px 5px 5px 0px",
+                        }}
+                      ></Add>
                       <ListItemText primary="Új lista"></ListItemText>
                     </ListItemButton>
                     {listGroup.lists.map((item) => {
