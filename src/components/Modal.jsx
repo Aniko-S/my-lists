@@ -1,27 +1,29 @@
-import { useState } from "react";
 import { useData } from "../store/DataContext";
-import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import CloseButton from "react-bootstrap/CloseButton";
 
-function ItemModal({ children, onClose = () => {}, title }) {
+function MyModal() {
+  const { isShowModal, setIsShowModal, modalTitle, modalBody } = useData();
+
   const handleClose = () => {
-    onClose();
+    setIsShowModal(false);
   };
 
   return (
     <>
       <div className="modal">
-        <Modal size="lg" show={true} onHide={handleClose}>
+        <Modal size="lg" show={isShowModal} onHide={handleClose}>
           <Modal.Header>
-            <Modal.Title className="text-align-center">{title}</Modal.Title>
+            <Modal.Title className="text-align-center">
+              {modalTitle}
+            </Modal.Title>
             <CloseButton onClick={handleClose} aria-label="Hide" />
           </Modal.Header>
-          <Modal.Body>{children}</Modal.Body>
+          <Modal.Body>{modalBody}</Modal.Body>
         </Modal>
       </div>
     </>
   );
 }
 
-export default ItemModal;
+export default MyModal;

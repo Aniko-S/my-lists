@@ -19,6 +19,10 @@ export function useData() {
 }
 
 export const DataContextProvider = ({ children }) => {
+  const [isShowModal, setIsShowModal] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalBody, setModalBody] = useState(<></>);
+
   const setListDataSnapshot = (path, id, onSuccess) => {
     const docRef = doc(collection(db, path), id);
     const q = query(docRef);
@@ -95,6 +99,12 @@ export const DataContextProvider = ({ children }) => {
   };
 
   const ctxValue = {
+    isShowModal,
+    setIsShowModal,
+    modalTitle,
+    setModalTitle,
+    modalBody,
+    setModalBody,
     setListDataSnapshot,
     setItemListSnapshot,
     deleteItem,

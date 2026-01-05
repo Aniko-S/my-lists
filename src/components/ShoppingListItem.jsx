@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { useData } from "../store/DataContext";
 import { useParams } from "react-router";
 
-function ShoppingListItem({ id, onUnmount = () => {}, onReset = () => {} }) {
+function ShoppingListItem({ id, onUnmount = () => {} }) {
   const [item, setItem] = useState({ name: "", store: "" });
   const [itemId, setItemId] = useState();
 
-  const { createItem, getItemById, updateItem } = useData();
+  const { setModalTitle, setIsShowModal, createItem, getItemById, updateItem } =
+    useData();
 
   const params = useParams();
   const listId = params.id;
@@ -16,6 +17,9 @@ function ShoppingListItem({ id, onUnmount = () => {}, onReset = () => {} }) {
     if (id) {
       getItemById(path, listId, id, setItem);
       setItemId(id);
+      setModalTitle("Tétel módosítása");
+    } else {
+      setModalTitle("Új tétel létrehozása");
     }
 
     return onUnmount;
@@ -38,7 +42,6 @@ function ShoppingListItem({ id, onUnmount = () => {}, onReset = () => {} }) {
           handleSave(e);
         }}
       >
-        <div>{id}</div>
         <div className="form-group">
           <label htmlFor="name">Termék megnevezése</label>
           <input
@@ -63,7 +66,7 @@ function ShoppingListItem({ id, onUnmount = () => {}, onReset = () => {} }) {
           <button
             type="reset"
             className="btn btn-secondary mx-3"
-            onClick={() => onReset()}
+            onClick={() => setIsShowModal(false)}
           >
             Mégse
           </button>

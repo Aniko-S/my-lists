@@ -2,25 +2,26 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Delete, Edit } from "@mui/icons-material";
 import { useData } from "../store/DataContext";
-import Modal from "./Modal";
 import ShoppingListItem from "./ShoppingListItem";
 import CreateList from "./CreateList";
+import Modal from "./Modal";
 
 function ShoppingList() {
   const [list, setList] = useState();
   const [itemList, setItemList] = useState([]);
-  const [editItemId, setEditItemId] = useState("");
-  const [modalTitle, setModalTitle] = useState("");
-  const [isShowCreateListModal, setIsShowCreateListModal] = useState(false);
-  const [isShowCreateUpdateItemModal, setIsShowCreateUpdateItemModal] =
-    useState(false);
 
   const params = useParams();
   const listId = params.id;
   const path = "shopping-list";
 
-  const { setListDataSnapshot, setItemListSnapshot, deleteItem, updateItem } =
-    useData();
+  const {
+    setIsShowModal,
+    setModalBody,
+    setListDataSnapshot,
+    setItemListSnapshot,
+    deleteItem,
+    updateItem,
+  } = useData();
 
   useEffect(() => {
     if (!listId) {
@@ -28,8 +29,8 @@ function ShoppingList() {
     }
 
     if (listId == "new") {
-      setModalTitle("Új lista létrehozása");
-      setIsShowCreateListModal(true);
+      setModalBody(<CreateList></CreateList>);
+      setIsShowModal(true);
       return;
     }
 
@@ -59,55 +60,22 @@ function ShoppingList() {
   };
 
   const handleNewItem = () => {
-    setModalTitle("Új tétel létrehozása");
-    setIsShowCreateUpdateItemModal(true);
+    setModalBody(<ShoppingListItem></ShoppingListItem>);
+    setIsShowModal(true);
   };
 
   const handleUpdateItem = (id) => {
-    setEditItemId(id);
-    setModalTitle("Tétel módosítása");
-    setIsShowCreateUpdateItemModal(true);
+    setModalBody(<ShoppingListItem id={id}></ShoppingListItem>);
+    setIsShowModal(true);
   };
 
   const handleCheck = (event, id) => {
     updateItem(path, listId, id, { checked: event.target.checked });
   };
 
-  const getModal = () => {
-    if (isShowCreateUpdateItemModal) {
-      return (
-        <Modal
-          onClose={() => setIsShowCreateUpdateItemModal(false)}
-          title={modalTitle}
-        >
-          <ShoppingListItem
-            id={editItemId}
-            onUnmount={() => {
-              setEditItemId(null);
-            }}
-            onReset={() => setIsShowCreateUpdateItemModal(false)}
-          ></ShoppingListItem>
-        </Modal>
-      );
-    }
-
-    if (isShowCreateListModal) {
-      return (
-        <Modal
-          onClose={() => setIsShowCreateListModal(false)}
-          title={modalTitle}
-        >
-          <CreateList
-            onReset={() => setIsShowCreateListModal(false)}
-          ></CreateList>
-        </Modal>
-      );
-    }
-  };
-
   return (
     <>
-      {getModal()}
+      <Modal></Modal>
       <h2>{list?.title}</h2>
       <table className="table table-hover">
         <thead>
