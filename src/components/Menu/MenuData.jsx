@@ -57,6 +57,7 @@ function MenuData() {
       isOpen: isShoppingListCollapseOpen,
       setIsOpen: setIsShoppingListCollapseOpen,
       lists: shoppingLists,
+      path: "shopping-list",
     },
     {
       id: 2,
@@ -64,6 +65,7 @@ function MenuData() {
       isOpen: isTodoListCollapseOpen,
       setIsOpen: setIsTodoListCollapseOpen,
       lists: todoLists,
+      path: "todo-list",
     },
     {
       id: 3,
@@ -71,6 +73,7 @@ function MenuData() {
       isOpen: isEventListCollapseOpen,
       setIsOpen: setIsEventListCollapseOpen,
       lists: eventLists,
+      path: "event-list",
     },
   ];
 
@@ -93,6 +96,14 @@ function MenuData() {
                 </ListItemButton>
                 <Collapse in={listGroup.isOpen} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
+                    <ListItemButton
+                      sx={{ pl: 4 }}
+                      key="new"
+                      component={Link}
+                      to={`/${listGroup.path}/new`}
+                    >
+                      <ListItemText primary="Új lista"></ListItemText>
+                    </ListItemButton>
                     {listGroup.lists.map((item) => {
                       return (
                         <ListItemButton

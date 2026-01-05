@@ -19,9 +19,6 @@ export function useData() {
 }
 
 export const DataContextProvider = ({ children }) => {
-  const [isShowItemModal, setIsShowItemModal] = useState(false);
-  const [itemModalTitle, setItemModalTitle] = useState("");
-
   const setListDataSnapshot = (path, id, onSuccess) => {
     const docRef = doc(collection(db, path), id);
     const q = query(docRef);
@@ -98,10 +95,6 @@ export const DataContextProvider = ({ children }) => {
   };
 
   const ctxValue = {
-    isShowItemModal,
-    setIsShowItemModal,
-    itemModalTitle,
-    setItemModalTitle,
     setListDataSnapshot,
     setItemListSnapshot,
     deleteItem,

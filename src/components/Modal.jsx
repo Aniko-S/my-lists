@@ -4,21 +4,17 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import CloseButton from "react-bootstrap/CloseButton";
 
-function ItemModal({ children }) {
-  const { isShowItemModal, setIsShowItemModal, itemModalTitle } = useData();
-
+function ItemModal({ children, onClose = () => {}, title }) {
   const handleClose = () => {
-    setIsShowItemModal(false);
+    onClose();
   };
 
   return (
     <>
       <div className="modal">
-        <Modal size="lg" show={isShowItemModal} onHide={handleClose}>
+        <Modal size="lg" show={true} onHide={handleClose}>
           <Modal.Header>
-            <Modal.Title className="text-align-center">
-              {itemModalTitle}
-            </Modal.Title>
+            <Modal.Title className="text-align-center">{title}</Modal.Title>
             <CloseButton onClick={handleClose} aria-label="Hide" />
           </Modal.Header>
           <Modal.Body>{children}</Modal.Body>

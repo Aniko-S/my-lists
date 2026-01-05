@@ -2,17 +2,11 @@ import { useEffect, useState } from "react";
 import { useData } from "../store/DataContext";
 import { useParams } from "react-router";
 
-function ShoppingListItem({ id, onUnmount }) {
+function ShoppingListItem({ id, onUnmount = () => {}, onReset = () => {} }) {
   const [item, setItem] = useState({ name: "", store: "" });
   const [itemId, setItemId] = useState();
 
-  const {
-    setItemModalTitle,
-    createItem,
-    setIsShowItemModal,
-    getItemById,
-    updateItem,
-  } = useData();
+  const { createItem, getItemById, updateItem } = useData();
 
   const params = useParams();
   const listId = params.id;
@@ -20,11 +14,8 @@ function ShoppingListItem({ id, onUnmount }) {
 
   useEffect(() => {
     if (id) {
-      setItemModalTitle("Tétel módosítása");
       getItemById(path, listId, id, setItem);
       setItemId(id);
-    } else {
-      setItemModalTitle("Új tétel létrehozása");
     }
 
     return onUnmount;
@@ -38,8 +29,6 @@ function ShoppingListItem({ id, onUnmount }) {
     } else {
       createItem(path, listId, item);
     }
-
-    setIsShowItemModal(false);
   };
 
   return (
@@ -74,7 +63,7 @@ function ShoppingListItem({ id, onUnmount }) {
           <button
             type="reset"
             className="btn btn-secondary mx-3"
-            onClick={() => setIsShowItemModal(false)}
+            onClick={() => onReset()}
           >
             Mégse
           </button>
