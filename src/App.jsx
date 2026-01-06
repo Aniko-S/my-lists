@@ -34,7 +34,7 @@ function App() {
                 }
               ></Route>
               <Route
-                path="/todo-list"
+                path="/todo-list/:id"
                 element={
                   <Menu>
                     <TodoList></TodoList>
@@ -42,7 +42,7 @@ function App() {
                 }
               ></Route>
               <Route
-                path="/event-list"
+                path="/event-list/:id"
                 element={
                   <Menu>
                     <EventList></EventList>

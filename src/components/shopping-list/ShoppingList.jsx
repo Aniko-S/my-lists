@@ -28,11 +28,9 @@ function ShoppingList() {
       return;
     }
 
-    const onSuccess = (data) => {
-      setList(data);
-    };
-
-    const getDataUnsub = setListDataSnapshot(path, listId, onSuccess);
+    const getDataUnsub = setListDataSnapshot(path, listId, (data) =>
+      setList(data)
+    );
     return () => getDataUnsub();
   }, [listId]);
 
@@ -41,11 +39,9 @@ function ShoppingList() {
       return;
     }
 
-    const onSuccess = (data) => {
+    const getDataUnsub = setItemListSnapshot(path, listId, (data) => {
       setItemList(data);
-    };
-
-    const getDataUnsub = setItemListSnapshot(path, listId, onSuccess);
+    });
     return () => getDataUnsub();
   }, [listId]);
 

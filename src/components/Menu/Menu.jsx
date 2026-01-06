@@ -13,12 +13,14 @@ import DrawerOnMobile from "./DrawerOnMobile";
 import DrawerOnDesktop from "./DrawerOnDesktop";
 import MenuData from "./MenuData";
 import Modal from "../Modal";
+import { useData } from "../../store/DataContext";
 
 const drawerWidth = 240;
 
 function Menu({ children }) {
   const [isClosing, setIsClosing] = useState(false);
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
+  const { selectedGroup } = useData();
 
   const handleDrawerToggle = () => {
     if (!isClosing) {
@@ -50,7 +52,7 @@ function Menu({ children }) {
               <MenuIcon></MenuIcon>
             </IconButton>
             <Typography variant="h5" noWrap component="div">
-              Lista címe
+              {selectedGroup}
             </Typography>
           </Toolbar>
         </AppBar>

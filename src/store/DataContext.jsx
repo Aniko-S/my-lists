@@ -23,8 +23,15 @@ export const DataContextProvider = ({ children }) => {
   const [isShowModal, setIsShowModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [modalBody, setModalBody] = useState(<></>);
+  const [selectedGroup, setSelectedGroup] = useState();
 
   const { user } = useAuth();
+
+  const groupList = {
+    "shopping-list": "Bevásárlólisták",
+    "todo-list": "Tennivalók",
+    "event-list": "Események",
+  };
 
   const setListDataSnapshot = (path, id, onSuccess) => {
     const docRef = doc(collection(db, path), id);
@@ -34,6 +41,7 @@ export const DataContextProvider = ({ children }) => {
       (snapShot) => {
         const data = snapShot.data();
         onSuccess(data);
+        setSelectedGroup(groupList[data.type]);
       },
       (error) => {
         console.log(error);
@@ -136,6 +144,7 @@ export const DataContextProvider = ({ children }) => {
     setModalTitle,
     modalBody,
     setModalBody,
+    selectedGroup,
     setListDataSnapshot,
     setItemListSnapshot,
     deleteItem,
