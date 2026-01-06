@@ -2,6 +2,7 @@
     width: 100vw;
     max-width: 100vw;
     height: 100vh;
+    max-height: 100vh;
     padding: 0px;
     margin: 0px;
     font-family: cursive;
@@ -28,3 +29,29 @@
     margin-top: 64px;
 }
 
+.closeButton:hover {
+    border: none;
+}
+
+.page {
+    position: relative;
+    height: 85vh;
+    width: calc("100vw - 240px")     /* because drawerWidth=240px */
+}
+
+.bottom {
+    position: absolute;
+    bottom: 0;
+    left: 50%; 
+    transform: translateX(-50%);
+}
+
+table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+td {
+    overflow-wrap: break-word;
+    word-break: break-word;
+}

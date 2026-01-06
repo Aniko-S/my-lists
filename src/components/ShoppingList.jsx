@@ -68,49 +68,53 @@ function ShoppingList() {
 
   return (
     <>
-      <PageHead title={list?.title} path={path} listId={listId}></PageHead>
-      <table className="table table-hover">
-        <thead>
-          <tr>
-            <th>Termék</th>
-            <th>Lelőhely</th>
-            <th>Műveletek</th>
-          </tr>
-        </thead>
-        <tbody>
-          {itemList.map((item) => {
-            return (
-              <tr key={item.id}>
-                <td>
-                  <input
-                    id={item.id}
-                    type="checkbox"
-                    checked={item.checked}
-                    className="form-check-input"
-                    onChange={(e) => handleCheck(e, item.id)}
-                  ></input>
-                  <label
-                    htmlFor={item.id}
-                    className={
-                      "form-check-label" + (item.checked ? " checked" : "")
-                    }
-                  >
-                    {item.name}
-                  </label>
-                </td>
-                <td>{item.store}</td>
-                <td>
-                  <Edit onClick={() => handleUpdateItem(item.id)}></Edit>
-                  <Delete onClick={() => handleDeleteItem(item.id)}></Delete>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <button className="btn btn-success" onClick={handleNewItem}>
-        Tétel hozzáadása
-      </button>
+      <div className="page">
+        <PageHead title={list?.title} path={path} listId={listId}></PageHead>
+        <table className="table table-hover">
+          <thead>
+            <tr>
+              <th>Termék</th>
+              <th>Lelőhely</th>
+              <th style={{ width: "100px" }}>Műveletek</th>
+            </tr>
+          </thead>
+          <tbody>
+            {itemList.map((item) => {
+              return (
+                <tr key={item.id}>
+                  <td>
+                    <div style={{ paddingLeft: "20px" }}>
+                      <input
+                        id={item.id}
+                        type="checkbox"
+                        checked={item.checked}
+                        className="form-check-input"
+                        onChange={(e) => handleCheck(e, item.id)}
+                      ></input>
+                      <label
+                        htmlFor={item.id}
+                        className={
+                          "form-check-label" + (item.checked ? " checked" : "")
+                        }
+                      >
+                        {item.name}
+                      </label>
+                    </div>
+                  </td>
+                  <td>{item.store}</td>
+                  <td>
+                    <Edit onClick={() => handleUpdateItem(item.id)}></Edit>
+                    <Delete onClick={() => handleDeleteItem(item.id)}></Delete>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+        <button className="btn btn-success bottom" onClick={handleNewItem}>
+          Tétel hozzáadása
+        </button>
+      </div>
     </>
   );
 }

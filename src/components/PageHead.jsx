@@ -25,7 +25,7 @@ function PageHead({ title, path, listId }) {
 
   return (
     <>
-      <div className="row">
+      <div className="d-flex">
         <div className="col-2"></div>
         <h2 className="col-8">{title}</h2>
 
