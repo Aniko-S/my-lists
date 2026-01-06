@@ -33,6 +33,8 @@ function ShoppingListItem({ id, onUnmount = () => {} }) {
     } else {
       createItem(path, listId, item);
     }
+
+    setIsShowModal(false);
   };
 
   return (

@@ -7,7 +7,7 @@ function CreateList({ defaultType }) {
   const [selectedType, setSelectedType] = useState({ value: "" });
   const [title, setTitle] = useState();
 
-  const { setModalTitle, createList } = useData();
+  const { setModalTitle, setIsShowModal, createList } = useData();
   const navigate = useNavigate();
 
   const listTypes = [
