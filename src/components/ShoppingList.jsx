@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Delete, Edit } from "@mui/icons-material";
+import { Checkbox } from "@mui/material";
 import { useData } from "../store/DataContext";
 import ShoppingListItem from "./ShoppingListItem";
 import PageHead from "./PageHead";
@@ -73,6 +74,7 @@ function ShoppingList() {
         <table className="table table-hover">
           <thead>
             <tr>
+              <th style={{ width: "60px" }}>Kész</th>
               <th>Termék</th>
               <th>Lelőhely</th>
               <th style={{ width: "100px" }}>Műveletek</th>
@@ -83,24 +85,15 @@ function ShoppingList() {
               return (
                 <tr key={item.id}>
                   <td>
-                    <div style={{ paddingLeft: "20px" }}>
-                      <input
-                        id={item.id}
-                        type="checkbox"
-                        checked={item.checked}
-                        className="form-check-input"
-                        onChange={(e) => handleCheck(e, item.id)}
-                      ></input>
-                      <label
-                        htmlFor={item.id}
-                        className={
-                          "form-check-label" + (item.checked ? " checked" : "")
-                        }
-                      >
-                        {item.name}
-                      </label>
-                    </div>
+                    <Checkbox
+                      color="success"
+                      checked={item.checked}
+                      id={item.id}
+                      onChange={(e) => handleCheck(e, item.id)}
+                      className="p-0"
+                    ></Checkbox>
                   </td>
+                  <td>{item.name}</td>
                   <td>{item.store}</td>
                   <td>
                     <Edit onClick={() => handleUpdateItem(item.id)}></Edit>
