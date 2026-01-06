@@ -1,8 +1,28 @@
 import { Dropdown } from "react-bootstrap";
 import { Settings } from "@mui/icons-material";
 import { Typography } from "@mui/material";
+import { useData } from "../store/DataContext";
+import Dialog from "./Dialog";
+import { useNavigate } from "react-router";
 
-function PageHead({ title }) {
+function PageHead({ title, path, listId }) {
+  const { deleteList, setIsShowModal, setModalTitle, setModalBody } = useData();
+  const navigate = useNavigate();
+
+  const handleClickOnDelete = () => {
+    setModalTitle("Lista törlése");
+    setModalBody(<Dialog handleDelete={handleDeleteList}></Dialog>);
+    setIsShowModal(true);
+  };
+
+  const handleDeleteList = async () => {
+    setIsShowModal(false);
+    const isDeleteSuccess = await deleteList(path, listId);
+    if (isDeleteSuccess) {
+      navigate("/home");
+    }
+  };
+
   return (
     <>
       <div className="row">
@@ -32,7 +52,9 @@ function PageHead({ title }) {
           <Dropdown.Menu>
             <Dropdown.Item href="#/action-1">Lista adatai</Dropdown.Item>
             <Dropdown.Item href="#/action-2">Lista megosztása</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">Lista törlése</Dropdown.Item>
+            <Dropdown.Item onClick={handleClickOnDelete}>
+              Lista törlése
+            </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </div>

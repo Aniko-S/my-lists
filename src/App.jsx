@@ -8,6 +8,7 @@ import ShoppingList from "./components/ShoppingList";
 import TodoList from "./components/TodoList";
 import EventList from "./components/EventList";
 import Menu from "./components/Menu/Menu";
+import TodosEventsToday from "./components/TodosEventsToday";
 
 function App() {
   return (
@@ -16,6 +17,14 @@ function App() {
         <DataContextProvider>
           <Router>
             <Routes>
+              <Route
+                path="/home"
+                element={
+                  <Menu>
+                    <TodosEventsToday></TodosEventsToday>
+                  </Menu>
+                }
+              ></Route>
               <Route
                 path="/shopping-list/:id"
                 element={

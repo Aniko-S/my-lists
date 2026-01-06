@@ -117,6 +117,18 @@ export const DataContextProvider = ({ children }) => {
     }
   };
 
+  const deleteList = async (path, listId) => {
+    const docRef = doc(collection(db, path), listId);
+
+    try {
+      await deleteDoc(docRef);
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
   const ctxValue = {
     isShowModal,
     setIsShowModal,
@@ -131,6 +143,7 @@ export const DataContextProvider = ({ children }) => {
     updateItem,
     getItemById,
     createList,
+    deleteList,
   };
 
   return <DataContext value={ctxValue}>{children}</DataContext>;

@@ -68,7 +68,7 @@ function ShoppingList() {
 
   return (
     <>
-      <PageHead title={list?.title}></PageHead>
+      <PageHead title={list?.title} path={path} listId={listId}></PageHead>
       <table className="table table-hover">
         <thead>
           <tr>
