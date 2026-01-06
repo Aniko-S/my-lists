@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Dropdown } from "react-bootstrap";
 import { Settings } from "@mui/icons-material";
 import { Typography } from "@mui/material";
@@ -6,17 +7,16 @@ import Dialog from "./Dialog";
 import { useNavigate } from "react-router";
 
 function PageHead({ title, path, listId }) {
-  const { deleteList, setIsShowModal, setModalTitle, setModalBody } = useData();
+  const [isShowDialog, setIsShowDialog] = useState(false);
+  const { deleteList } = useData();
   const navigate = useNavigate();
 
   const handleClickOnDelete = () => {
-    setModalTitle("Lista törlése");
-    setModalBody(<Dialog handleDelete={handleDeleteList}></Dialog>);
-    setIsShowModal(true);
+    setIsShowDialog(true);
   };
 
   const handleDeleteList = async () => {
-    setIsShowModal(false);
+    setIsShowDialog(false);
     const isDeleteSuccess = await deleteList(path, listId);
     if (isDeleteSuccess) {
       navigate("/home");
@@ -25,7 +25,13 @@ function PageHead({ title, path, listId }) {
 
   return (
     <>
-      <div className="d-flex">
+      {isShowDialog && (
+        <Dialog
+          handleClose={() => setIsShowDialog(false)}
+          handleDelete={handleDeleteList}
+        ></Dialog>
+      )}
+      <div className="d-flex py-3">
         <div className="col-2"></div>
         <h2 className="col-8">{title}</h2>
 

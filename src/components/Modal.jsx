@@ -1,6 +1,5 @@
 import { useData } from "../store/DataContext";
 import Modal from "react-bootstrap/Modal";
-import CloseButton from "react-bootstrap/CloseButton";
 import { Close } from "@mui/icons-material";
 
 function MyModal() {

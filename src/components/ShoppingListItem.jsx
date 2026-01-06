@@ -31,6 +31,7 @@ function ShoppingListItem({ id, onUnmount = () => {} }) {
     if (itemId) {
       updateItem(path, listId, itemId, item);
     } else {
+      item.checked = false;
       createItem(path, listId, item);
     }
 
