@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import { Delete, Edit } from "@mui/icons-material";
 import { useData } from "../store/DataContext";
 import ShoppingListItem from "./ShoppingListItem";
-import CreateList from "./CreateList";
+import PageHead from "./PageHead";
 
 function ShoppingList() {
   const [list, setList] = useState();
@@ -68,7 +68,7 @@ function ShoppingList() {
 
   return (
     <>
-      <h2>{list?.title}</h2>
+      <PageHead title={list?.title}></PageHead>
       <table className="table table-hover">
         <thead>
           <tr>
