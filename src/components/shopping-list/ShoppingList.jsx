@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Delete, Edit } from "@mui/icons-material";
 import { Checkbox } from "@mui/material";
-import { useData } from "../store/DataContext";
+import { useData } from "../../store/DataContext";
 import ShoppingListItem from "./ShoppingListItem";
-import PageHead from "./PageHead";
+import PageHead from "../PageHead";
 
 function ShoppingList() {
   const [list, setList] = useState();

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useData } from "../store/DataContext";
+import { useData } from "../../store/DataContext";
 import { useParams } from "react-router";
 
 function ShoppingListItem({ id, onUnmount = () => {} }) {

@@ -4,10 +4,10 @@ import { Route, BrowserRouter as Router, Routes } from "react-router";
 import { AuthContextProvider } from "./store/AuthContext";
 import { DataContextProvider } from "./store/DataContext";
 import SignIn from "./components/SignIn";
-import ShoppingList from "./components/ShoppingList";
+import ShoppingList from "./components/shopping-list/ShoppingList";
 import TodoList from "./components/TodoList";
 import EventList from "./components/EventList";
-import Menu from "./components/Menu/Menu";
+import Menu from "./components/menu/Menu";
 import TodosEventsToday from "./components/TodosEventsToday";
 
 function App() {
