@@ -15,8 +15,7 @@ function ShoppingList() {
   const path = "shopping-list";
 
   const {
-    setIsShowModal,
-    setModalBody,
+    showModal,
     setListDataSnapshot,
     setItemListSnapshot,
     deleteItem,
@@ -50,13 +49,11 @@ function ShoppingList() {
   };
 
   const handleNewItem = () => {
-    setModalBody(<ShoppingListItem></ShoppingListItem>);
-    setIsShowModal(true);
+    showModal({ body: <ShoppingListItem></ShoppingListItem> });
   };
 
   const handleUpdateItem = (id) => {
-    setModalBody(<ShoppingListItem id={id}></ShoppingListItem>);
-    setIsShowModal(true);
+    showModal({ body: <ShoppingListItem id={id}></ShoppingListItem> });
   };
 
   const handleCheck = (event, id) => {

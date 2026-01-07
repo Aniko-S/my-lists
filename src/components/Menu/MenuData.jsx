@@ -19,7 +19,7 @@ function MenuData() {
   const [eventLists, setEventLists] = useState([]);
 
   const { user } = useAuth();
-  const { setIsShowModal, setModalBody, setIsMobileDrawerOpen } = useData();
+  const { showModal, setIsMobileDrawerOpen } = useData();
 
   useEffect(() => {
     return getLists("shopping-list", setShoppingLists);
@@ -34,8 +34,10 @@ function MenuData() {
   }, [user]);
 
   const handleCreateList = (type) => {
-    setIsShowModal(true);
-    setModalBody(<CreateList defaultType={type}></CreateList>);
+    showModal({
+      title: "Új lista létrehozása",
+      body: <CreateList defaultType={type}></CreateList>,
+    });
   };
 
   const getLists = (path, setter) => {

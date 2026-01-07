@@ -6,7 +6,7 @@ function ShoppingListItem({ id, onUnmount = () => {} }) {
   const [item, setItem] = useState({ name: "", store: "" });
   const [itemId, setItemId] = useState();
 
-  const { setModalTitle, setIsShowModal, createItem, getItemById, updateItem } =
+  const { setModalTitle, hideModal, createItem, getItemById, updateItem } =
     useData();
 
   const params = useParams();
@@ -35,7 +35,7 @@ function ShoppingListItem({ id, onUnmount = () => {} }) {
       createItem(path, listId, item);
     }
 
-    setIsShowModal(false);
+    hideModal();
   };
 
   return (
@@ -69,7 +69,7 @@ function ShoppingListItem({ id, onUnmount = () => {} }) {
           <button
             type="reset"
             className="btn btn-secondary mx-3"
-            onClick={() => setIsShowModal(false)}
+            onClick={hideModal}
           >
             Mégse
           </button>

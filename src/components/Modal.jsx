@@ -3,16 +3,17 @@ import Modal from "react-bootstrap/Modal";
 import { Close } from "@mui/icons-material";
 
 function MyModal() {
-  const { isShowModal, setIsShowModal, modalTitle, modalBody } = useData();
+  const { isShowModal, hideModal, modalTitle, modalBody, modalSize } =
+    useData();
 
   const handleClose = () => {
-    setIsShowModal(false);
+    hideModal();
   };
 
   return (
     <>
       <div className="modal">
-        <Modal size="lg" show={isShowModal} onHide={handleClose}>
+        <Modal size={modalSize} show={isShowModal} onHide={handleClose}>
           <Modal.Header className="row">
             <div className="col-1"></div>
             <Modal.Title className="col-10 text-center">

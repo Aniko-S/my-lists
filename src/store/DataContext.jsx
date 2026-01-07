@@ -24,6 +24,7 @@ export const DataContextProvider = ({ children }) => {
   const [isShowModal, setIsShowModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [modalBody, setModalBody] = useState(<></>);
+  const [modalSize, setModalSize] = useState("lg");
   const [selectedGroup, setSelectedGroup] = useState();
 
   const { user } = useAuth();
@@ -32,6 +33,28 @@ export const DataContextProvider = ({ children }) => {
     "shopping-list": "Bevásárlólisták",
     "todo-list": "Tennivalók",
     "event-list": "Események",
+  };
+
+  const showModal = ({ title, body }) => {
+    setIsShowModal(true);
+    setModalTitle(title);
+    setModalBody(body);
+    setModalSize("lg");
+  };
+
+  const hideModal = () => {
+    setIsShowModal(false);
+  };
+
+  const showDialog = ({ title, body }) => {
+    setIsShowModal(true);
+    setModalTitle(title);
+    setModalBody(body);
+    setModalSize("sm");
+  };
+
+  const hideDialog = () => {
+    setIsShowModal(false);
   };
 
   const setListDataSnapshot = (path, id, onSuccess) => {
@@ -141,12 +164,14 @@ export const DataContextProvider = ({ children }) => {
   const ctxValue = {
     isMobileDrawerOpen,
     setIsMobileDrawerOpen,
+    showModal,
+    hideModal,
     isShowModal,
-    setIsShowModal,
     modalTitle,
     setModalTitle,
     modalBody,
-    setModalBody,
+    showDialog,
+    hideDialog,
     selectedGroup,
     setListDataSnapshot,
     setItemListSnapshot,

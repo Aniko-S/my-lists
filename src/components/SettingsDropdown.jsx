@@ -4,20 +4,21 @@ import { Dropdown } from "react-bootstrap";
 import { Settings } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import { useData } from "../store/DataContext";
-import Dialog from "./Dialog";
+import DeleteList from "./DeleteList";
 
 function SettingsDropdown({ path, listId }) {
-  const [isShowDialog, setIsShowDialog] = useState(false);
-
-  const { deleteList } = useData();
+  const { deleteList, showDialog, hideDialog } = useData();
   const navigate = useNavigate();
 
   const handleClickOnDelete = () => {
-    setIsShowDialog(true);
+    showDialog({
+      title: "Lista törlése",
+      body: <DeleteList handleDelete={handleDeleteList}></DeleteList>,
+    });
   };
 
   const handleDeleteList = async () => {
-    setIsShowDialog(false);
+    hideDialog();
     const isDeleteSuccess = await deleteList(path, listId);
     if (isDeleteSuccess) {
       navigate("/home");
@@ -26,12 +27,6 @@ function SettingsDropdown({ path, listId }) {
 
   return (
     <>
-      {isShowDialog && (
-        <Dialog
-          handleClose={() => setIsShowDialog(false)}
-          handleDelete={handleDeleteList}
-        ></Dialog>
-      )}
       <Dropdown className="col-2 p-0">
         <Dropdown.Toggle
           variant="secondary"

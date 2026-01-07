@@ -7,7 +7,7 @@ function CreateList({ defaultType }) {
   const [selectedType, setSelectedType] = useState({ value: "" });
   const [title, setTitle] = useState();
 
-  const { setModalTitle, setIsShowModal, createList } = useData();
+  const { hideModal, createList } = useData();
   const navigate = useNavigate();
 
   const listTypes = [
@@ -26,7 +26,6 @@ function CreateList({ defaultType }) {
   ];
 
   useEffect(() => {
-    setModalTitle("Új lista létrehozása");
     const defaultValue = listTypes.find((item) => item.value == defaultType);
     setSelectedType(defaultValue);
   }, [defaultType]);
@@ -71,7 +70,7 @@ function CreateList({ defaultType }) {
           <button
             type="reset"
             className="btn btn-secondary mx-3"
-            onClick={() => setIsShowModal(false)}
+            onClick={hideModal}
           >
             Mégse
           </button>
