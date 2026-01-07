@@ -20,6 +20,7 @@ export function useData() {
 }
 
 export const DataContextProvider = ({ children }) => {
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
   const [isShowModal, setIsShowModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [modalBody, setModalBody] = useState(<></>);
@@ -138,6 +139,8 @@ export const DataContextProvider = ({ children }) => {
   };
 
   const ctxValue = {
+    isMobileDrawerOpen,
+    setIsMobileDrawerOpen,
     isShowModal,
     setIsShowModal,
     modalTitle,

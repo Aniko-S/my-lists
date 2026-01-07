@@ -19,8 +19,8 @@ const drawerWidth = 240;
 
 function Menu({ children }) {
   const [isClosing, setIsClosing] = useState(false);
-  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
-  const { selectedGroup } = useData();
+  const { selectedGroup, isMobileDrawerOpen, setIsMobileDrawerOpen } =
+    useData();
 
   const handleDrawerToggle = () => {
     if (!isClosing) {
@@ -61,11 +61,7 @@ function Menu({ children }) {
           sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
           aria-label="mailbox folders"
         >
-          <DrawerOnMobile
-            setIsClosing={setIsClosing}
-            isMobileDrawerOpen={isMobileDrawerOpen}
-            setIsMobileDrawerOpen={setIsMobileDrawerOpen}
-          >
+          <DrawerOnMobile setIsClosing={setIsClosing}>
             <MenuData></MenuData>
           </DrawerOnMobile>
 

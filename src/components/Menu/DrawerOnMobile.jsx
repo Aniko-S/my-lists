@@ -1,12 +1,9 @@
 import { Drawer } from "@mui/material";
+import { useData } from "../../store/DataContext";
 
-function DrawerOnMobile({
-  children,
-  drawerWidth,
-  setIsClosing,
-  isMobileDrawerOpen,
-  setIsMobileDrawerOpen,
-}) {
+function DrawerOnMobile({ children, drawerWidth, setIsClosing }) {
+  const { isMobileDrawerOpen, setIsMobileDrawerOpen } = useData();
+
   const handleDrawerClose = () => {
     setIsClosing(true);
     setIsMobileDrawerOpen(false);

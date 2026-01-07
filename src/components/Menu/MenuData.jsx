@@ -19,7 +19,7 @@ function MenuData() {
   const [eventLists, setEventLists] = useState([]);
 
   const { user } = useAuth();
-  const { setIsShowModal, setModalBody } = useData();
+  const { setIsShowModal, setModalBody, setIsMobileDrawerOpen } = useData();
 
   useEffect(() => {
     return getLists("shopping-list", setShoppingLists);
@@ -128,7 +128,10 @@ function MenuData() {
                           component={Link}
                           to={`/${item.type}/${item.id}`}
                         >
-                          <ListItemText primary={item.title}></ListItemText>
+                          <ListItemText
+                            primary={item.title}
+                            onClick={() => setIsMobileDrawerOpen(false)}
+                          ></ListItemText>
                         </ListItemButton>
                       );
                     })}
