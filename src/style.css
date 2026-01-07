@@ -5,8 +5,8 @@
     max-height: 100vh;
     padding: 0px;
     margin: 0px;
-    font-family: cursive;
     background-color: #f8faf8;
+    font-family: "Playpen Sans Hebrew", cursive;
 }
 
 .sign-in-container {
