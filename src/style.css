@@ -29,6 +29,10 @@
     margin-top: 64px;
 }
 
+.closeButton {
+    background-color: white;
+}
+
 .closeButton:hover {
     border: none;
 }
