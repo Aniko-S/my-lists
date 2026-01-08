@@ -64,33 +64,26 @@ export const DataContextProvider = ({ children }) => {
     setModalSize("sm");
   };
 
-  const setListDataSnapshot = (path, id, onSuccess) => {
-    const docRef = doc(collection(db, path), id);
-    const q = query(docRef);
-    return onSnapshot(
-      q,
-      (snapShot) => {
-        const data = snapShot.data();
-        if (!data) {
-          showAlert({
-            title: "Hiba",
-            text: "A lista nem található.",
-          });
-          return;
-        }
+  const getListById = async (path, listId, setter = () => {}) => {
+    const docRef = doc(collection(db, path), listId);
 
-        onSuccess(data);
-        if (data?.type) {
-          setSelectedGroup(groupList[data.type]);
-        }
-      },
-      (error) => {
-        showAlert({
-          title: "Hiba",
-          text: error.message || "Hiba történt a művelet során.",
-        });
+    try {
+      const snapShot = await getDoc(docRef);
+      const data = snapShot.data();
+      if (!data) {
+        throw { message: "A lista nem található." };
       }
-    );
+
+      setter(snapShot.data());
+      if (data?.type) {
+        setSelectedGroup(groupList[data.type]);
+      }
+    } catch (error) {
+      showAlert({
+        title: "Hiba",
+        text: error?.message || "Hiba történt a művelet során.",
+      });
+    }
   };
 
   const setItemListSnapshot = (path, id, onSuccess) => {
@@ -225,7 +218,7 @@ export const DataContextProvider = ({ children }) => {
     showDialog,
     hideDialog,
     selectedGroup,
-    setListDataSnapshot,
+    getListById,
     setItemListSnapshot,
     deleteItem,
     createItem,

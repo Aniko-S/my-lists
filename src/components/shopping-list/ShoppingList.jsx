@@ -16,7 +16,7 @@ function ShoppingList() {
 
   const {
     showModal,
-    setListDataSnapshot,
+    getListById,
     setItemListSnapshot,
     deleteItem,
     updateItem,
@@ -27,10 +27,7 @@ function ShoppingList() {
       return;
     }
 
-    const getDataUnsub = setListDataSnapshot(path, listId, (data) =>
-      setList(data)
-    );
-    return () => getDataUnsub();
+    getListById(path, listId, setList);
   }, [listId]);
 
   useEffect(() => {
