@@ -59,7 +59,7 @@ function ShoppingListTable({ path, listId }) {
                     className="p-0"
                   ></Checkbox>
                 </td>
-                <td>{item.name}</td>
+                <td className={item.checked ? "checked" : ""}>{item.name}</td>
                 <td>{item.store}</td>
                 <td>
                   <Edit onClick={() => handleUpdateItem(item.id)}></Edit>
