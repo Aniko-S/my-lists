@@ -34,8 +34,6 @@ function ShoppingListItem({ id, onUnmount = () => {} }) {
       item.checked = false;
       createItem(path, listId, item);
     }
-
-    hideModal();
   };
 
   return (

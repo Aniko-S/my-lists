@@ -57,6 +57,13 @@ export const DataContextProvider = ({ children }) => {
     setIsShowModal(false);
   };
 
+  const showAlert = ({ title, text }) => {
+    setIsShowModal(true);
+    setModalTitle(title);
+    setModalBody(<div className="text-center my-3">{text}</div>);
+    setModalSize("sm");
+  };
+
   const setListDataSnapshot = (path, id, onSuccess) => {
     const docRef = doc(collection(db, path), id);
     const q = query(docRef);
@@ -64,11 +71,24 @@ export const DataContextProvider = ({ children }) => {
       q,
       (snapShot) => {
         const data = snapShot.data();
+        if (!data) {
+          showAlert({
+            title: "Hiba",
+            text: "A lista nem található.",
+          });
+          return;
+        }
+
         onSuccess(data);
-        setSelectedGroup(groupList[data.type]);
+        if (data?.type) {
+          setSelectedGroup(groupList[data.type]);
+        }
       },
       (error) => {
-        console.log(error);
+        showAlert({
+          title: "Hiba",
+          text: error.message || "Hiba történt a művelet során.",
+        });
       }
     );
   };
@@ -88,7 +108,10 @@ export const DataContextProvider = ({ children }) => {
         onSuccess(data);
       },
       (error) => {
-        console.log(error);
+        showAlert({
+          title: "Hiba",
+          text: error?.message || "Hiba történt a művelet során.",
+        });
       }
     );
   };
@@ -99,7 +122,10 @@ export const DataContextProvider = ({ children }) => {
     try {
       await deleteDoc(docRef);
     } catch (error) {
-      console.log(error);
+      showAlert({
+        title: "Hiba",
+        text: error?.message || "Hiba történt a művelet során.",
+      });
     }
   };
 
@@ -107,8 +133,12 @@ export const DataContextProvider = ({ children }) => {
     const collectionRef = collection(db, `${path}/${listId}/items`);
     try {
       await addDoc(collectionRef, item);
+      hideModal();
     } catch (error) {
-      console.log(error);
+      showAlert({
+        title: "Hiba",
+        text: error?.message || "Hiba történt a művelet során.",
+      });
     }
   };
 
@@ -117,8 +147,12 @@ export const DataContextProvider = ({ children }) => {
 
     try {
       await updateDoc(docRef, updatedItem);
+      hideModal();
     } catch (error) {
-      console.log(error);
+      showAlert({
+        title: "Hiba",
+        text: error?.message || "Hiba történt a művelet során.",
+      });
     }
   };
 
@@ -127,9 +161,17 @@ export const DataContextProvider = ({ children }) => {
 
     try {
       const snapShot = await getDoc(docRef);
+      const data = snapShot.data();
+      if (!data) {
+        throw { message: "A tétel nem található." };
+      }
+
       setter(snapShot.data());
     } catch (error) {
-      console.log(error);
+      showAlert({
+        title: "Hiba",
+        text: error?.message || "Hiba történt a művelet során.",
+      });
     }
   };
 
@@ -143,9 +185,16 @@ export const DataContextProvider = ({ children }) => {
     try {
       const newDoc = await addDoc(collectionRef, item);
       setIsShowModal(false);
+      if (!newDoc?.id) {
+        throw { message: "Hiba történt a művelet során." };
+      }
+
       return newDoc.id;
     } catch (error) {
-      console.log(error);
+      showAlert({
+        title: "Hiba",
+        text: error?.message || "Hiba történt a művelet során.",
+      });
     }
   };
 
@@ -156,7 +205,10 @@ export const DataContextProvider = ({ children }) => {
       await deleteDoc(docRef);
       return true;
     } catch (error) {
-      console.log(error);
+      showAlert({
+        title: "Hiba",
+        text: error?.message || "Hiba történt a művelet során.",
+      });
       return false;
     }
   };
