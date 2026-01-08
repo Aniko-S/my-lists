@@ -5,7 +5,7 @@ import { AuthContextProvider } from "./store/AuthContext";
 import { DataContextProvider } from "./store/DataContext";
 import SignIn from "./components/SignIn";
 import ShoppingList from "./components/shopping-list/ShoppingList";
-import TodoList from "./components/TodoList";
+import TodoList from "./components/todo-list/TodoList";
 import EventList from "./components/EventList";
 import Menu from "./components/menu/Menu";
 import TodosEventsToday from "./components/TodosEventsToday";
