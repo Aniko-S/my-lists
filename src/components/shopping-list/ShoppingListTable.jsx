@@ -1,12 +1,36 @@
 import { Delete, Edit } from "@mui/icons-material";
 import { Checkbox } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useData } from "../../store/DataContext";
+import ShoppingListItemForm from "./ShoppingListItemForm";
 
-function ShoppingListTable({
-  itemList,
-  handleUpdateItem,
-  handleCheck,
-  handleDeleteItem,
-}) {
+function ShoppingListTable({ path, listId }) {
+  const [itemList, setItemList] = useState([]);
+  const { setItemListSnapshot, showModal, updateItem, deleteItem } = useData();
+
+  useEffect(() => {
+    if (!listId) {
+      return;
+    }
+
+    const getDataUnsub = setItemListSnapshot(path, listId, (data) => {
+      setItemList(data);
+    });
+    return () => getDataUnsub();
+  }, [listId]);
+
+  const handleUpdateItem = (id) => {
+    showModal({ body: <ShoppingListItemForm id={id}></ShoppingListItemForm> });
+  };
+
+  const handleCheck = (event, id) => {
+    updateItem(path, listId, id, { checked: event.target.checked });
+  };
+
+  const handleDeleteItem = (itemId) => {
+    deleteItem(path, listId, itemId);
+  };
+
   return (
     <>
       <table className="table table-hover">
