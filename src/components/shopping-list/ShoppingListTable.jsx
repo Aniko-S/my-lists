@@ -42,8 +42,7 @@ function ShoppingListTable({ path, listId }) {
           <tr>
             <th style={{ width: "60px" }}>Kész</th>
             <th>Termék</th>
-            <th>Lelőhely</th>
-            <th style={{ width: "100px" }}>Műveletek</th>
+            <th style={{ width: "120px" }}>Műveletek</th>
           </tr>
         </thead>
         <tbody>
@@ -59,8 +58,13 @@ function ShoppingListTable({ path, listId }) {
                     className="p-0"
                   ></Checkbox>
                 </td>
-                <td className={item.checked ? "checked" : ""}>{item.name}</td>
-                <td>{item.store}</td>
+                <td>
+                  <div className={"name" + (item.checked ? " checked" : "")}>
+                    {item.name}
+                  </div>
+                  <div className="details">{item.details}</div>
+                </td>
+
                 <td>
                   <Edit onClick={() => handleUpdateItem(item.id)}></Edit>
                   <Delete onClick={() => handleDeleteItem(item.id)}></Delete>

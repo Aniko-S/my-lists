@@ -59,3 +59,11 @@ td {
     overflow-wrap: break-word;
     word-break: break-word;
 }
+
+td .name {
+    font-size: 20px;
+}
+
+td .details {
+    font-size: 14px
+}

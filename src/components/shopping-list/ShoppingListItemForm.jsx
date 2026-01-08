@@ -54,14 +54,15 @@ function ShoppingListItemForm({ id, onUnmount = () => {} }) {
           ></input>
         </div>
         <div className="form-group">
-          <label htmlFor="store">Milyen üzletben lehet beszerezni?</label>
-          <input
-            id="store"
-            type="text"
+          <label htmlFor="details">Részletek</label>
+          <textarea
+            id="details"
             className="form-control"
-            defaultValue={item.store}
-            onChange={(e) => setItem({ ...item, store: e.target.value })}
-          ></input>
+            rows={4}
+            defaultValue={item.details}
+            placeholder="Például mennyiség, márka, hol található, stb."
+            onChange={(e) => setItem({ ...item, details: e.target.value })}
+          ></textarea>
         </div>
         <div className="mt-5 d-flex justify-content-center">
           <button
