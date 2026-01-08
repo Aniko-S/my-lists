@@ -8,7 +8,7 @@ function ShoppingListTable({ path, listId }) {
   const [itemList, setItemList] = useState([]);
   const [order, setOrder] = useState([
     { name: "checked", direction: "asc" },
-    { name: "name", direction: "asc" },
+    { name: "addedAt", direction: "desc" },
   ]);
   const { setItemListSnapshot, showModal, updateItem, deleteItem } = useData();
 

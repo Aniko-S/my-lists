@@ -128,6 +128,7 @@ export const DataContextProvider = ({ children }) => {
   };
 
   const createItem = async (path, listId, item) => {
+    item.addedAt = new Date();
     const collectionRef = collection(db, `${path}/${listId}/items`);
     try {
       await addDoc(collectionRef, item);
@@ -164,7 +165,7 @@ export const DataContextProvider = ({ children }) => {
         throw { message: "A tétel nem található." };
       }
 
-      setter(snapShot.data());
+      setter(data);
     } catch (error) {
       showAlert({
         title: "Hiba",
