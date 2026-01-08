@@ -3,7 +3,7 @@ import { useData } from "../../store/DataContext";
 import { useParams } from "react-router";
 
 function ShoppingListItemForm({ id, onUnmount = () => {} }) {
-  const [item, setItem] = useState({ name: "", store: "" });
+  const [item, setItem] = useState({ name: "", details: "" });
   const [itemId, setItemId] = useState();
 
   const { setModalTitle, hideModal, createItem, getItemById, updateItem } =
