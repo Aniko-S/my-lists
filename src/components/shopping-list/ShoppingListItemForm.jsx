@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useData } from "../../store/DataContext";
 import { useParams } from "react-router";
 
-function ShoppingListItem({ id, onUnmount = () => {} }) {
+function ShoppingListItemForm({ id, onUnmount = () => {} }) {
   const [item, setItem] = useState({ name: "", store: "" });
   const [itemId, setItemId] = useState();
 
@@ -80,4 +80,4 @@ function ShoppingListItem({ id, onUnmount = () => {} }) {
   );
 }
 
-export default ShoppingListItem;
+export default ShoppingListItemForm;

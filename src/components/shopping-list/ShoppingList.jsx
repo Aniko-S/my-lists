@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { Delete, Edit } from "@mui/icons-material";
-import { Checkbox } from "@mui/material";
 import { useData } from "../../store/DataContext";
-import ShoppingListItem from "./ShoppingListItem";
+import ShoppingListItemForm from "./ShoppingListItemForm";
 import PageHead from "../PageHead";
+import ShoppingListTable from "./ShoppingListTable";
 
 function ShoppingList() {
   const [list, setList] = useState();
@@ -46,11 +45,11 @@ function ShoppingList() {
   };
 
   const handleNewItem = () => {
-    showModal({ body: <ShoppingListItem></ShoppingListItem> });
+    showModal({ body: <ShoppingListItemForm></ShoppingListItemForm> });
   };
 
   const handleUpdateItem = (id) => {
-    showModal({ body: <ShoppingListItem id={id}></ShoppingListItem> });
+    showModal({ body: <ShoppingListItemForm id={id}></ShoppingListItemForm> });
   };
 
   const handleCheck = (event, id) => {
@@ -61,39 +60,12 @@ function ShoppingList() {
     <>
       <div className="page">
         <PageHead title={list?.title} path={path} listId={listId}></PageHead>
-        <table className="table table-hover">
-          <thead>
-            <tr>
-              <th style={{ width: "60px" }}>Kész</th>
-              <th>Termék</th>
-              <th>Lelőhely</th>
-              <th style={{ width: "100px" }}>Műveletek</th>
-            </tr>
-          </thead>
-          <tbody>
-            {itemList.map((item) => {
-              return (
-                <tr key={item.id}>
-                  <td>
-                    <Checkbox
-                      color="success"
-                      checked={item.checked}
-                      id={item.id}
-                      onChange={(e) => handleCheck(e, item.id)}
-                      className="p-0"
-                    ></Checkbox>
-                  </td>
-                  <td>{item.name}</td>
-                  <td>{item.store}</td>
-                  <td>
-                    <Edit onClick={() => handleUpdateItem(item.id)}></Edit>
-                    <Delete onClick={() => handleDeleteItem(item.id)}></Delete>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <ShoppingListTable
+          itemList={itemList}
+          handleUpdateItem={handleUpdateItem}
+          handleCheck={handleCheck}
+          handleDeleteItem={handleDeleteItem}
+        ></ShoppingListTable>
         <button className="btn btn-success bottom" onClick={handleNewItem}>
           Tétel hozzáadása
         </button>
