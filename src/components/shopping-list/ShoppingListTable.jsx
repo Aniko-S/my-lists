@@ -6,6 +6,10 @@ import ShoppingListItemForm from "./ShoppingListItemForm";
 
 function ShoppingListTable({ path, listId }) {
   const [itemList, setItemList] = useState([]);
+  const [order, setOrder] = useState([
+    { name: "checked", direction: "asc" },
+    { name: "name", direction: "asc" },
+  ]);
   const { setItemListSnapshot, showModal, updateItem, deleteItem } = useData();
 
   useEffect(() => {
@@ -13,7 +17,7 @@ function ShoppingListTable({ path, listId }) {
       return;
     }
 
-    const getDataUnsub = setItemListSnapshot(path, listId, (data) => {
+    const getDataUnsub = setItemListSnapshot(path, listId, order, (data) => {
       setItemList(data);
     });
     return () => getDataUnsub();
