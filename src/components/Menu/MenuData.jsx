@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { db } from "../../config/firebase";
 import { useAuth } from "../../store/AuthContext";
 import { Collapse, List, ListItemButton, ListItemText } from "@mui/material";
-import { Add, ExpandLess, ExpandMore } from "@mui/icons-material";
-import { Link } from "react-router";
+import { Add, ExpandLess, ExpandMore, Logout } from "@mui/icons-material";
+import { Link, replace, useNavigate } from "react-router";
 import { useData } from "../../store/DataContext";
 import CreateList from "../CreateList";
 
@@ -18,7 +18,7 @@ function MenuData() {
   const [todoLists, setTodoLists] = useState([]);
   const [eventLists, setEventLists] = useState([]);
 
-  const { user } = useAuth();
+  const { user, handleSignOut } = useAuth();
   const { showModal, setIsMobileDrawerOpen } = useData();
 
   useEffect(() => {
@@ -32,6 +32,12 @@ function MenuData() {
   useEffect(() => {
     return getLists("event-list", setEventLists);
   }, [user]);
+
+  const navigate = useNavigate();
+
+  const handleClickOnSignOut = () => {
+    handleSignOut(() => navigate("/", { replace: true }));
+  };
 
   const handleCreateList = (type) => {
     showModal({
@@ -90,6 +96,11 @@ function MenuData() {
   return (
     <>
       <div style={{ backgroundColor: "#cce7c9", height: "100%" }}>
+        <div className="w-100 text-center">
+          <button className="btn my-3" onClick={handleClickOnSignOut}>
+            <Logout></Logout>
+          </button>
+        </div>
         <List>
           {menuList.map((listGroup) => {
             return (

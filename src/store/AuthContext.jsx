@@ -1,11 +1,16 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { auth } from "../config/firebase";
-import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
 
 const AuthContext = createContext({
   user: null,
   isUserLoggedIn: false,
   handleSignIn: () => {},
+  handleSignOut: () => {},
 });
 
 export function useAuth() {
@@ -42,7 +47,11 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
-  const ctxValue = { user, isUserLoggedIn, handleSignIn };
+  const handleSignOut = async (onSuccess) => {
+    signOut(auth).then(() => onSuccess());
+  };
+
+  const ctxValue = { user, isUserLoggedIn, handleSignIn, handleSignOut };
 
   return <AuthContext value={ctxValue}>{children}</AuthContext>;
 };
