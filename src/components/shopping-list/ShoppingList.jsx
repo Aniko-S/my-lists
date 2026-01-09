@@ -4,6 +4,7 @@ import { useData } from "../../store/DataContext";
 import ShoppingListItemForm from "./ShoppingListItemForm";
 import PageHead from "../PageHead";
 import ShoppingListTable from "./ShoppingListTable";
+import { setPageHeight } from "../menu/Menu";
 
 function ShoppingList() {
   const [list, setList] = useState();
@@ -19,6 +20,7 @@ function ShoppingList() {
       return;
     }
 
+    setPageHeight();
     getListById(path, listId, setList);
   }, [listId]);
 

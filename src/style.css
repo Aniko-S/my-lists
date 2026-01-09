@@ -39,7 +39,6 @@
 
 .page {
     position: relative;
-    height: calc(100vh - 55px);     /* because appBarHeight=55px      */
     padding: 10px;
 }
 
@@ -53,7 +52,6 @@
 
 .table-wrapper {
     width: 100%;
-    height: 81%;
     overflow: auto;
 }
 

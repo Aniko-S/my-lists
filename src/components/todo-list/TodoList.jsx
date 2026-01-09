@@ -4,6 +4,7 @@ import { useData } from "../../store/DataContext";
 import TodoListItemForm from "./TodoListItemForm";
 import PageHead from "../PageHead";
 import TodoListTable from "./TodoListTable";
+import { setPageHeight } from "../menu/Menu";
 
 function TodoList() {
   const [list, setList] = useState();
@@ -19,6 +20,7 @@ function TodoList() {
       return;
     }
 
+    setPageHeight();
     getListById(path, listId, setList);
   }, [listId]);
 
