@@ -73,7 +73,3 @@ td .name {
 td .details {
     font-size: 14px
 }
-
-.css-xpczdp-MuiToolbar-root {
-    min-height: 55px !important;        /* because appBarHeight=55, it doesn't work other way */
-}

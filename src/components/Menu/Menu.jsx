@@ -87,7 +87,7 @@ function Menu({ children }) {
           <Toolbar
             sx={{
               height: `${appBarHeight}px`,
-              mintHeight: "55px !important",
+              minHeight: "55px !important",
             }}
           />
           {children}
