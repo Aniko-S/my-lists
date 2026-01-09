@@ -39,8 +39,8 @@
 
 .page {
     position: relative;
-    height: 88vh;
-    width: calc("100vw - 240px")     /* because drawerWidth=240px */
+    height: calc(100vh - 55px);     /* because appBarHeight=55px      */
+    padding: 10px;
 }
 
 .bottom {
@@ -48,11 +48,12 @@
     bottom: 0;
     left: 50%; 
     transform: translateX(-50%);
+    margin: 10px 0px;
 }
 
 .table-wrapper {
     width: 100%;
-    height: 78%;
+    height: 81%;
     overflow: auto;
 }
 
@@ -71,4 +72,8 @@ td .name {
 
 td .details {
     font-size: 14px
+}
+
+.css-xpczdp-MuiToolbar-root {
+    min-height: 55px !important;        /* because appBarHeight=55, it doesn't work other way */
 }

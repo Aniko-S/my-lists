@@ -16,6 +16,7 @@ import Modal from "../Modal";
 import { useData } from "../../store/DataContext";
 
 const drawerWidth = 240;
+const appBarHeight = 55;
 
 function Menu({ children }) {
   const [isClosing, setIsClosing] = useState(false);
@@ -31,17 +32,23 @@ function Menu({ children }) {
   return (
     <>
       <Modal></Modal>
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: "flex", height: "100%" }}>
         <CssBaseline></CssBaseline>
         <AppBar
           position="fixed"
           sx={{
             width: { sm: `calc(100% - ${drawerWidth}px)` },
             ml: { sm: `${drawerWidth}px` },
+            height: `${appBarHeight}px`,
           }}
           color="success"
         >
-          <Toolbar>
+          <Toolbar
+            sx={{
+              minHeight: "100% !important",
+              height: "100%",
+            }}
+          >
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -73,12 +80,16 @@ function Menu({ children }) {
           component="main"
           sx={{
             flexGrow: 1,
-            p: 1,
             width: { sm: `calc(100% - ${drawerWidth}px)` },
             maxWidth: "100%",
           }}
         >
-          <Toolbar />
+          <Toolbar
+            sx={{
+              height: `${appBarHeight}px`,
+              mintHeight: "55px !important",
+            }}
+          />
           {children}
         </Box>
       </Box>
