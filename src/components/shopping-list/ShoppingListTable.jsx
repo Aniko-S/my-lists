@@ -37,43 +37,45 @@ function ShoppingListTable({ path, listId }) {
 
   return (
     <>
-      <table className="table table-hover">
-        <thead>
-          <tr>
-            <th style={{ width: "60px" }}>Kész</th>
-            <th>Termék</th>
-            <th style={{ width: "120px" }}>Műveletek</th>
-          </tr>
-        </thead>
-        <tbody>
-          {itemList.map((item) => {
-            return (
-              <tr key={item.id}>
-                <td>
-                  <Checkbox
-                    color="success"
-                    checked={item.checked}
-                    id={item.id}
-                    onChange={(e) => handleCheck(e, item.id)}
-                    className="p-0"
-                  ></Checkbox>
-                </td>
-                <td>
-                  <div className={"name" + (item.checked ? " checked" : "")}>
-                    {item.name}
-                  </div>
-                  <div className="details">{item.details}</div>
-                </td>
+      <div className="table-wrapper">
+        <table className="table table-hover">
+          <thead>
+            <tr>
+              <th style={{ width: "60px" }}>Kész</th>
+              <th>Termék</th>
+              <th style={{ width: "120px" }}>Műveletek</th>
+            </tr>
+          </thead>
+          <tbody>
+            {itemList.map((item) => {
+              return (
+                <tr key={item.id}>
+                  <td>
+                    <Checkbox
+                      color="success"
+                      checked={item.checked}
+                      id={item.id}
+                      onChange={(e) => handleCheck(e, item.id)}
+                      className="p-0"
+                    ></Checkbox>
+                  </td>
+                  <td>
+                    <div className={"name" + (item.checked ? " checked" : "")}>
+                      {item.name}
+                    </div>
+                    <div className="details">{item.details}</div>
+                  </td>
 
-                <td>
-                  <Edit onClick={() => handleUpdateItem(item.id)}></Edit>
-                  <Delete onClick={() => handleDeleteItem(item.id)}></Delete>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                  <td>
+                    <Edit onClick={() => handleUpdateItem(item.id)}></Edit>
+                    <Delete onClick={() => handleDeleteItem(item.id)}></Delete>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </>
   );
 }
