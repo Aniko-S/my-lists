@@ -64,6 +64,7 @@ function CreateList({ defaultType }) {
             type="text"
             className="form-control"
             onChange={(e) => setTitle(e.target.value)}
+            autoFocus
           ></input>
         </div>
         <div className="mt-5 d-flex justify-content-center">

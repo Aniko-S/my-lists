@@ -51,6 +51,7 @@ function TodoListItemForm({ id, onUnmount = () => {} }) {
             className="form-control"
             defaultValue={item.name}
             onChange={(e) => setItem({ ...item, name: e.target.value })}
+            autoFocus
           ></input>
         </div>
         <div className="form-group">
