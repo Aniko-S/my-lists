@@ -19,7 +19,7 @@ function MenuData() {
   const [eventLists, setEventLists] = useState([]);
 
   const { user, handleSignOut } = useAuth();
-  const { showModal, setIsMobileDrawerOpen } = useData();
+  const { showModal, hideModal, setIsMobileDrawerOpen } = useData();
 
   useEffect(() => {
     return getLists("shopping-list", setShoppingLists);
@@ -39,11 +39,18 @@ function MenuData() {
     handleSignOut(() => navigate("/", { replace: true }));
   };
 
-  const handleCreateList = (type) => {
+  const handleClickOnCreateList = (type) => {
     showModal({
       title: "Új lista létrehozása",
       body: <CreateList defaultType={type}></CreateList>,
     });
+
+    setIsMobileDrawerOpen(false);
+  };
+
+  const handleClickOnMenuItem = () => {
+    setIsMobileDrawerOpen(false);
+    hideModal();
   };
 
   const getLists = (path, setter) => {
@@ -121,7 +128,7 @@ function MenuData() {
                       sx={{ pl: 4 }}
                       key="new"
                       component={Link}
-                      onClick={() => handleCreateList(listGroup.path)}
+                      onClick={() => handleClickOnCreateList(listGroup.path)}
                     >
                       <Add
                         color="success"
@@ -140,11 +147,9 @@ function MenuData() {
                           key={item.id}
                           component={Link}
                           to={`/${item.type}/${item.id}`}
+                          onClick={handleClickOnMenuItem}
                         >
-                          <ListItemText
-                            primary={item.title}
-                            onClick={() => setIsMobileDrawerOpen(false)}
-                          ></ListItemText>
+                          <ListItemText primary={item.title}></ListItemText>
                         </ListItemButton>
                       );
                     })}
