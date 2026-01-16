@@ -5,7 +5,7 @@ import { Delete, Edit } from "@mui/icons-material";
 
 function EventListTable({ path, listId }) {
   const [itemList, setItemList] = useState([]);
-  const [order, setOrder] = useState([{ name: "date", direction: "asc" }]);
+  const [order, setOrder] = useState([{ name: "dateTime", direction: "asc" }]);
   const { setItemListSnapshot, showModal, deleteItem } = useData();
 
   useEffect(() => {
@@ -45,7 +45,7 @@ function EventListTable({ path, listId }) {
                     <div className="name">{item.name}</div>
                     <div className="details">{item.details}</div>
                     <div className="date">
-                      {new Date(item.date).toLocaleString()}
+                      {new Date(item.dateTime).toLocaleString()}
                     </div>
                   </td>
 

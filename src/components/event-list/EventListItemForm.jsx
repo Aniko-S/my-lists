@@ -22,7 +22,7 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
     if (id) {
       getItemById(path, listId, id, (data) => {
         setItem(data);
-        setDateTimeFromItem(data);
+        setDateAndTimeFromItem(data);
       });
 
       setItemId(id);
@@ -40,12 +40,12 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
     const minutes = new Date(time).getMinutes();
     dateInDateFormat.setHours(hours, minutes, 0);
 
-    item.date = dateInDateFormat.getTime();
+    item.dateTime = dateInDateFormat.getTime();
   };
 
-  const setDateTimeFromItem = (data) => {
-    setDate(dayjs(data.date));
-    setTime(dayjs(data.date));
+  const setDateAndTimeFromItem = (data) => {
+    setDate(dayjs(data.dateTime));
+    setTime(dayjs(data.dateTime));
   };
 
   const handleSave = (e) => {
