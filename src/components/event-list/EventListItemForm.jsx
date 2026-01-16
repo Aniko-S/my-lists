@@ -6,7 +6,11 @@ import DateSetter from "../DateSetter";
 import TimeSetter from "../TimeSetter";
 
 function EventListItemForm({ id, onUnmount = () => {} }) {
-  const [item, setItem] = useState({ name: "", details: "" });
+  const [item, setItem] = useState({
+    name: "",
+    details: "",
+    isRecurring: false,
+  });
   const [itemId, setItemId] = useState();
   const [date, setDate] = useState(dayjs());
   const [time, setTime] = useState(dayjs(new Date().setHours(0, 0, 0)));
@@ -77,8 +81,22 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
             autoFocus
           ></input>
         </div>
+
+        <div className="form-check">
+          <input
+            id="name"
+            type="checkbox"
+            className="form-check-input"
+            defaultValue={item.isRecurring}
+            onChange={(e) =>
+              setItem({ ...item, isRecurring: e.target.checked })
+            }
+          ></input>
+          <label htmlFor="name">Ismétlődő</label>
+        </div>
+
         <div className="form-group">
-          <div>Ideje</div>
+          <div>{item.isRecurring ? "Első alkalom ideje" : "Ideje"}</div>
           <div className="my-2">
             <DateSetter value={date} setValue={setDate}></DateSetter>
           </div>
@@ -86,6 +104,35 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
             <TimeSetter value={time} setValue={setTime}></TimeSetter>
           </div>
         </div>
+
+        {item.isRecurring && (
+          <div className="form-group">
+            <label htmlFor="periodValue">Periódus</label>
+            <input
+              id="periodValue"
+              type="number"
+              className="form-control"
+              defaultValue={item.periodValue}
+              onChange={(e) =>
+                setItem({ ...item, periodValue: e.target.value })
+              }
+              placeholder="Érték"
+            ></input>
+            <label htmlFor="period">Periódus</label>
+            <select
+              className="form-select"
+              aria-label="Default select example"
+              defaultValue={"day"}
+              onChange={(e) => setItem({ ...item, periodUnit: e.target.value })}
+            >
+              <option value="day">nap</option>
+              <option value="week">hét</option>
+              <option value="month">hónap</option>
+              <option value="year">év</option>
+            </select>
+          </div>
+        )}
+
         <div className="form-group">
           <label htmlFor="details">Részletek</label>
           <textarea
@@ -97,6 +144,7 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
             onChange={(e) => setItem({ ...item, details: e.target.value })}
           ></textarea>
         </div>
+
         <div className="mt-5 d-flex justify-content-center">
           <button
             type="reset"
