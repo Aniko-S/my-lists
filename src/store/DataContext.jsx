@@ -105,7 +105,6 @@ export const DataContextProvider = ({ children }) => {
         onSuccess(data);
       },
       (error) => {
-        console.log(error);
         showAlert({
           title: "Hiba",
           text: error?.message || "Hiba történt a művelet során.",

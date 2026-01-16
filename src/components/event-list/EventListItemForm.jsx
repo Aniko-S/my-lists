@@ -8,8 +8,8 @@ import TimeSetter from "../TimeSetter";
 function EventListItemForm({ id, onUnmount = () => {} }) {
   const [item, setItem] = useState({ name: "", details: "" });
   const [itemId, setItemId] = useState();
-  const [date, setDate] = useState(dayjs("2026-01-10T23:59:59"));
-  const [time, setTime] = useState(dayjs("2026-01-10T23:59:59"));
+  const [date, setDate] = useState(dayjs());
+  const [time, setTime] = useState(dayjs(new Date().setHours(0, 0, 0)));
 
   const { setModalTitle, hideModal, createItem, getItemById, updateItem } =
     useData();
@@ -20,7 +20,11 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
 
   useEffect(() => {
     if (id) {
-      getItemById(path, listId, id, setItem);
+      getItemById(path, listId, id, (data) => {
+        setItem(data);
+        setDateTimeFromItem(data);
+      });
+
       setItemId(id);
       setModalTitle("Tétel módosítása");
     } else {
@@ -30,13 +34,27 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
     return onUnmount;
   }, []);
 
+  const setItemDateTime = () => {
+    const dateInDateFormat = new Date(date);
+    const hours = new Date(time).getHours();
+    const minutes = new Date(time).getMinutes();
+    dateInDateFormat.setHours(hours, minutes, 0);
+
+    item.date = dateInDateFormat.getTime();
+  };
+
+  const setDateTimeFromItem = (data) => {
+    setDate(dayjs(data.date));
+    setTime(dayjs(data.date));
+  };
+
   const handleSave = (e) => {
     e.preventDefault();
+    setItemDateTime();
 
     if (itemId) {
       updateItem(path, listId, itemId, item);
     } else {
-      item.checked = false;
       createItem(path, listId, item);
     }
   };
