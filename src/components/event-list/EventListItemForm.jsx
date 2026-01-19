@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
-import { useData } from "../../store/DataContext";
-import { useParams } from "react-router";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Switch from "@mui/material/Switch";
+import { FormControlLabel } from "@mui/material";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import dayjs from "dayjs";
+import { useParams } from "react-router";
+import { useData } from "../../store/DataContext";
 import DateSetter from "../DateSetter";
 import TimeSetter from "../TimeSetter";
 
@@ -21,6 +27,12 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
   const params = useParams();
   const listId = params.id;
   const path = "event-list";
+  const unitList = {
+    day: "Nap",
+    week: "Hét",
+    month: "Hónap",
+    year: "Év",
+  };
 
   useEffect(() => {
     if (id) {
@@ -70,81 +82,86 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
           handleSave(e);
         }}
       >
-        <div className="form-group">
-          <label htmlFor="name">Esemény rövid megnevezése</label>
-          <input
-            id="name"
-            type="text"
-            className="form-control"
-            defaultValue={item.name}
-            onChange={(e) => setItem({ ...item, name: e.target.value })}
-            autoFocus
-          ></input>
-        </div>
+        <TextField
+          required
+          id="name"
+          label="Megnevezés"
+          fullWidth
+          onChange={(e) => setItem({ ...item, name: e.target.value })}
+          value={item.name}
+        ></TextField>
 
-        <div className="form-check">
-          <input
-            id="name"
-            type="checkbox"
-            className="form-check-input"
-            defaultValue={item.isRecurring}
-            onChange={(e) =>
-              setItem({ ...item, isRecurring: e.target.checked })
+        <div className="my-3">
+          <FormControlLabel
+            control={
+              <Switch
+                checked={item.isRecurring}
+                onChange={(e) =>
+                  setItem({ ...item, isRecurring: e.target.checked })
+                }
+                slotProps={{ input: { "aria-label": "controlled" } }}
+                color="success"
+              />
             }
-          ></input>
-          <label htmlFor="name">Ismétlődő</label>
+            label="Ismétlődő"
+          ></FormControlLabel>
         </div>
-
-        <div className="form-group">
-          <div>{item.isRecurring ? "Első alkalom ideje" : "Ideje"}</div>
-          <div className="my-2">
-            <DateSetter value={date} setValue={setDate}></DateSetter>
-          </div>
-          <div className="my-2">
-            <TimeSetter value={time} setValue={setTime}></TimeSetter>
-          </div>
+        <div className="my-3">
+          <DateSetter
+            value={date}
+            setValue={setDate}
+            label={item.isRecurring ? "Kezdő dátum" : "Dátum"}
+          ></DateSetter>
         </div>
-
+        <div className="my-3">
+          <TimeSetter
+            value={time}
+            setValue={setTime}
+            label={item.isRecurring ? "Kezdő idő" : "Idő"}
+          ></TimeSetter>
+        </div>
         {item.isRecurring && (
-          <div className="form-group">
-            <label htmlFor="periodValue">Periódus</label>
-            <input
+          <div>
+            <TextField
+              required
               id="periodValue"
+              label="Periódus értéke"
               type="number"
-              className="form-control"
-              defaultValue={item.periodValue}
+              fullWidth
+              margin="normal"
+              value={item.periodValue}
               onChange={(e) =>
                 setItem({ ...item, periodValue: e.target.value })
               }
-              placeholder="Érték"
-            ></input>
-            <label htmlFor="period">Periódus</label>
-            <select
-              className="form-select"
-              aria-label="Default select example"
-              defaultValue={"day"}
-              onChange={(e) => setItem({ ...item, periodUnit: e.target.value })}
-            >
-              <option value="day">nap</option>
-              <option value="week">hét</option>
-              <option value="month">hónap</option>
-              <option value="year">év</option>
-            </select>
+            ></TextField>
+
+            <div className="my-3">
+              <ToggleButtonGroup
+                aria-label="Period unit"
+                fullWidth
+                value={item.periodUnit}
+                onChange={(e) =>
+                  setItem({ ...item, periodUnit: e.target.value })
+                }
+              >
+                {Object.keys(unitList).map((key) => {
+                  return (
+                    <ToggleButton
+                      value={key}
+                      sx={{
+                        "&.MuiToggleButton-root:hover": {
+                          color: "green", //use the color you want
+                        },
+                      }}
+                    >
+                      {unitList[key]}
+                    </ToggleButton>
+                  );
+                })}
+              </ToggleButtonGroup>
+            </div>
           </div>
         )}
-
-        <div className="form-group">
-          <label htmlFor="details">Részletek</label>
-          <textarea
-            id="details"
-            className="form-control"
-            rows={4}
-            defaultValue={item.details}
-            placeholder="Például helyszín, résztvevők, stb."
-            onChange={(e) => setItem({ ...item, details: e.target.value })}
-          ></textarea>
-        </div>
-
         <div className="mt-5 d-flex justify-content-center">
           <button
             type="reset"

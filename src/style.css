@@ -27,6 +27,7 @@
 
 .modal {
     margin-top: 55px;
+    max-height: 80%;
 }
 
 .closeButton {

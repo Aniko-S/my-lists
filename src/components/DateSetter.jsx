@@ -4,7 +4,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import "dayjs/locale/hu";
 
-function DateSetter({ value, setValue }) {
+function DateSetter({ value, setValue, label = "Dátum", required = true }) {
   const customLocalText = {
     okButtonLabel: "Ok",
     cancelButtonLabel: "Mégse",
@@ -19,9 +19,14 @@ function DateSetter({ value, setValue }) {
       >
         <DemoContainer components={["DatePicker"]}>
           <DatePicker
-            label="Dátum"
+            label={label}
             value={value}
             onChange={(newValue) => setValue(newValue)}
+            slotProps={{
+              textField: {
+                required: required,
+              },
+            }}
           />
         </DemoContainer>
       </LocalizationProvider>
