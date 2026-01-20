@@ -36,8 +36,8 @@ export const DataContextProvider = ({ children }) => {
     "event-list": "Események",
   };
 
-  const setNextDate = (item) => {
-    item.nextDate = new Date(item.dateTime);
+  const setNextDateTime = (item) => {
+    item.nextDateTime = new Date(item.dateTime).getTime();
 
     if (!item.isRecurring) {
       return;
@@ -45,8 +45,8 @@ export const DataContextProvider = ({ children }) => {
 
     const today = new Date().setHours(0, 0, 0);
 
-    while (item.nextDate < today) {
-      let date = new Date(item.nextDate);
+    while (item.nextDateTime < today) {
+      let date = new Date(item.nextDateTime);
 
       switch (item.periodUnit) {
         case "day":
@@ -56,15 +56,21 @@ export const DataContextProvider = ({ children }) => {
           date.setDate(date.getDate() + Number(item.periodValue) * 7);
           break;
         case "month":
-          date.setMonth(date.getMonth() + item.periodValue);
+          date.setMonth(date.getMonth() + Number(item.periodValue));
           break;
         case "year":
-          date.setFullYear(date.getFullYear() + item.periodValue);
+          date.setFullYear(date.getFullYear() + Number(item.periodValue));
           break;
       }
 
-      item.nextDate = date.getTime();
+      item.nextDateTime = date.getTime();
     }
+  };
+
+  const setNextDate = (item) => {
+    item.nextDate = new Date(item.nextDateTime);
+    item.nextDate.setHours(0, 0, 0, 0);
+    item.nextDate = item.nextDate.getTime();
   };
 
   const showModal = ({ title, body }) => {
@@ -118,13 +124,7 @@ export const DataContextProvider = ({ children }) => {
     }
   };
 
-  const setItemListSnapshot = (
-    path,
-    id,
-    order,
-    onSuccess,
-    isSetDate = false
-  ) => {
+  const setItemListSnapshot = (path, id, order, setter, isSetDate = false) => {
     const orderByArray = order.map((item) =>
       orderBy(item.name, item.direction || "asc")
     );
@@ -134,16 +134,22 @@ export const DataContextProvider = ({ children }) => {
     return onSnapshot(
       q,
       (snapShot) => {
-        const data = snapShot.docs.map((doc) => ({
+        let data = snapShot.docs.map((doc) => ({
           ...doc.data(),
           id: doc.id,
         }));
 
-        if (isSetDate) {
-          data.forEach((item) => setNextDate(item));
+        if (!isSetDate) {
+          setter(data);
+          return;
         }
 
-        onSuccess(data);
+        data.forEach((item) => {
+          setNextDateTime(item);
+          setNextDate(item);
+        });
+        data = Object.groupBy(data, ({ nextDate }) => nextDate);
+        setter(data);
       },
       (error) => {
         showAlert({
