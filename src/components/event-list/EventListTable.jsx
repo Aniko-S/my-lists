@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import EventListItemForm from "./EventListItemForm";
 import { useData } from "../../store/DataContext";
-import { Delete, Edit } from "@mui/icons-material";
+import { Autorenew, Delete, Edit } from "@mui/icons-material";
 
 function EventListTable({ path, listId }) {
   const [itemList, setItemList] = useState([]);
@@ -13,9 +13,15 @@ function EventListTable({ path, listId }) {
       return;
     }
 
-    const getDataUnsub = setItemListSnapshot(path, listId, order, (data) => {
-      setItemList(data);
-    });
+    const getDataUnsub = setItemListSnapshot(
+      path,
+      listId,
+      order,
+      (data) => {
+        setItemList(data);
+      },
+      true
+    );
     return () => getDataUnsub();
   }, [listId]);
 
@@ -42,10 +48,17 @@ function EventListTable({ path, listId }) {
               return (
                 <tr key={item.id}>
                   <td>
-                    <div className="name">{item.name}</div>
+                    <div className="name">
+                      <span>{item.name}</span>
+                      {item.isRecurring && (
+                        <Autorenew
+                          style={{ fontSize: "15px", marginBottom: "8px" }}
+                        ></Autorenew>
+                      )}
+                    </div>
                     <div className="details">{item.details}</div>
                     <div className="date">
-                      {new Date(item.dateTime).toLocaleString()}
+                      {new Date(item.nextDate).toLocaleString()}
                     </div>
                   </td>
 

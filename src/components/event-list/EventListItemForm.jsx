@@ -16,6 +16,8 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
     name: "",
     details: "",
     isRecurring: false,
+    periodValue: 0,
+    periodUnit: "day",
   });
   const [itemId, setItemId] = useState();
   const [date, setDate] = useState(dayjs());
@@ -67,6 +69,11 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
   const handleSave = (e) => {
     e.preventDefault();
     setItemDateTime();
+
+    if (!item.isRecurring) {
+      delete item.periodUnit;
+      delete item.periodValue;
+    }
 
     if (itemId) {
       updateItem(path, listId, itemId, item);
@@ -131,7 +138,7 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
               margin="normal"
               value={item.periodValue}
               onChange={(e) =>
-                setItem({ ...item, periodValue: e.target.value })
+                setItem({ ...item, periodValue: Number(e.target.value) })
               }
             ></TextField>
 

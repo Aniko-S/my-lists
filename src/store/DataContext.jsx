@@ -36,6 +36,37 @@ export const DataContextProvider = ({ children }) => {
     "event-list": "Események",
   };
 
+  const setNextDate = (item) => {
+    item.nextDate = new Date(item.dateTime);
+
+    if (!item.isRecurring) {
+      return;
+    }
+
+    const today = new Date().setHours(0, 0, 0);
+
+    while (item.nextDate < today) {
+      let date = new Date(item.nextDate);
+
+      switch (item.periodUnit) {
+        case "day":
+          date.setDate(date.getDate() + Number(item.periodValue));
+          break;
+        case "week":
+          date.setDate(date.getDate() + Number(item.periodValue) * 7);
+          break;
+        case "month":
+          date.setMonth(date.getMonth() + item.periodValue);
+          break;
+        case "year":
+          date.setFullYear(date.getFullYear() + item.periodValue);
+          break;
+      }
+
+      item.nextDate = date.getTime();
+    }
+  };
+
   const showModal = ({ title, body }) => {
     setIsShowModal(true);
     setModalTitle(title);
@@ -87,7 +118,13 @@ export const DataContextProvider = ({ children }) => {
     }
   };
 
-  const setItemListSnapshot = (path, id, order, onSuccess) => {
+  const setItemListSnapshot = (
+    path,
+    id,
+    order,
+    onSuccess,
+    isSetDate = false
+  ) => {
     const orderByArray = order.map((item) =>
       orderBy(item.name, item.direction || "asc")
     );
@@ -101,6 +138,10 @@ export const DataContextProvider = ({ children }) => {
           ...doc.data(),
           id: doc.id,
         }));
+
+        if (isSetDate) {
+          data.forEach((item) => setNextDate(item));
+        }
 
         onSuccess(data);
       },
