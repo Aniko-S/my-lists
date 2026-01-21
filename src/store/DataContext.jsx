@@ -9,6 +9,7 @@ import {
   updateDoc,
   where,
   orderBy,
+  or,
 } from "firebase/firestore";
 import { createContext, useContext, useState } from "react";
 import { db } from "../config/firebase";
@@ -124,12 +125,22 @@ export const DataContextProvider = ({ children }) => {
     }
   };
 
-  const setItemListSnapshot = (path, id, order, setter, isSetDate = false) => {
+  const setItemListSnapshot = ({
+    path,
+    listId,
+    order,
+    filter = [],
+    setter,
+    isSetDate,
+  }) => {
     const orderByArray = order.map((item) =>
       orderBy(item.name, item.direction || "asc")
     );
-    const collectionRef = collection(db, `${path}/${id}/items`);
-    const q = query(collectionRef, ...orderByArray);
+    const filterArray = filter.map((item) =>
+      where(item.name, item.rel, item.value)
+    );
+    const collectionRef = collection(db, `${path}/${listId}/items`);
+    const q = query(collectionRef, ...orderByArray, or(...filterArray));
 
     return onSnapshot(
       q,
@@ -152,6 +163,7 @@ export const DataContextProvider = ({ children }) => {
         setter(data);
       },
       (error) => {
+        console.log(error);
         showAlert({
           title: "Hiba",
           text: error?.message || "Hiba történt a művelet során.",

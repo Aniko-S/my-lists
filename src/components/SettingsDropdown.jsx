@@ -30,7 +30,7 @@ function SettingsDropdown({ path, listId }) {
       <Dropdown className="col-2 p-0">
         <Dropdown.Toggle
           variant="secondary"
-          id="dropdown-basic"
+          id="settings-button"
           className="px-2"
         >
           <Settings sx={{ fontSize: "20px", marginBottom: "3px" }}></Settings>

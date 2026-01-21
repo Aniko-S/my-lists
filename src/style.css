@@ -86,3 +86,7 @@ hr {
 .list-row:hover {
     background-color: rgba(0,0,0,0.075);
 }
+
+#settings-button, #add-item-button {
+    height: 40px;
+}

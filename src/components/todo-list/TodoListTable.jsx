@@ -17,8 +17,13 @@ function TodoListTable({ path, listId }) {
       return;
     }
 
-    const getDataUnsub = setItemListSnapshot(path, listId, order, (data) => {
-      setItemList(data);
+    const getDataUnsub = setItemListSnapshot({
+      path,
+      listId,
+      order,
+      setter: (data) => {
+        setItemList(data);
+      },
     });
     return () => getDataUnsub();
   }, [listId]);

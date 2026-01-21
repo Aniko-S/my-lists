@@ -6,8 +6,12 @@ function PageHead({ title, path, listId, handleNewItem }) {
   return (
     <>
       <div className="d-flex pt-2 pb-4 sticky">
-        <div className="col-2">
-          <button className="btn btn-success" onClick={handleNewItem}>
+        <div className="col-2 pl-0">
+          <button
+            className="btn btn-success"
+            id="add-item-button"
+            onClick={handleNewItem}
+          >
             <Add
               style={{
                 stroke: "white",

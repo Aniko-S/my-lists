@@ -15,17 +15,21 @@ function EventListTable({ path, listId }) {
       return;
     }
 
-    const getDataUnsub = setItemListSnapshot(
+    const getDataUnsub = setItemListSnapshot({
       path,
       listId,
       order,
-      (data) => {
+      filter: [
+        { name: "dateTime", rel: ">=", value: new Date().setHours(0, 0, 0, 0) },
+        { name: "isRecurring", rel: "==", value: true },
+      ],
+      setter: (data) => {
         setItemList(data);
         const dateListWithoutSort = Object.keys(data);
         setDateList(dateListWithoutSort.toSorted());
       },
-      true
-    );
+      isSetDate: true,
+    });
 
     return () => getDataUnsub();
   }, [listId]);
