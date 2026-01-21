@@ -4,7 +4,6 @@ import { useData } from "../../store/DataContext";
 import TodoListItemForm from "./TodoListItemForm";
 import PageHead from "../PageHead";
 import TodoListTable from "./TodoListTable";
-import { setPageHeight } from "../menu/Menu";
 
 function TodoList() {
   const [list, setList] = useState();
@@ -20,7 +19,6 @@ function TodoList() {
       return;
     }
 
-    setPageHeight();
     getListById(path, listId, setList);
   }, [listId]);
 
@@ -31,11 +29,13 @@ function TodoList() {
   return (
     <>
       <div className="page">
-        <PageHead title={list?.title} path={path} listId={listId}></PageHead>
+        <PageHead
+          title={list?.title}
+          path={path}
+          listId={listId}
+          handleNewItem={handleNewItem}
+        ></PageHead>
         <TodoListTable path={path} listId={listId}></TodoListTable>
-        <button className="btn btn-success bottom" onClick={handleNewItem}>
-          Tétel hozzáadása
-        </button>
       </div>
     </>
   );

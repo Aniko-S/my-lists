@@ -4,7 +4,6 @@ import { useData } from "../../store/DataContext";
 import EventListItemForm from "./EventListItemForm";
 import PageHead from "../PageHead";
 import EventListTable from "./EventListTable";
-import { setPageHeight } from "../menu/Menu";
 
 function EventList() {
   const [list, setList] = useState();
@@ -20,7 +19,6 @@ function EventList() {
       return;
     }
 
-    setPageHeight();
     getListById(path, listId, setList);
   }, [listId]);
 
@@ -31,7 +29,12 @@ function EventList() {
   return (
     <>
       <div className="page">
-        <PageHead title={list?.title} path={path} listId={listId}></PageHead>
+        <PageHead
+          title={list?.title}
+          path={path}
+          listId={listId}
+          handleNewItem={handleNewItem}
+        ></PageHead>
         <EventListTable path={path} listId={listId}></EventListTable>
         <button className="btn btn-success bottom" onClick={handleNewItem}>
           Tétel hozzáadása

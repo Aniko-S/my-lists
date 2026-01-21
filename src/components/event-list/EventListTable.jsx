@@ -46,35 +46,32 @@ function EventListTable({ path, listId }) {
             <div className="text-left">
               {dayjs(Number(date)).format("YYYY.MM.DD.")}
             </div>
+            <hr></hr>
 
-            <table className="table table hover">
-              <tbody>
-                {itemList[date].map((item) => {
-                  return (
-                    <tr key={item.id}>
-                      <td>
-                        <div className="name">
-                          <span>{item.name}</span>
-                          {item.isRecurring && (
-                            <Autorenew
-                              style={{ fontSize: "15px", marginBottom: "8px" }}
-                            ></Autorenew>
-                          )}
-                        </div>
-                        <div className="details">{item.details}</div>
-                      </td>
-
-                      <td style={{ width: "120px" }}>
-                        <Edit onClick={() => handleUpdateItem(item.id)}></Edit>
-                        <Delete
-                          onClick={() => handleDeleteItem(item.id)}
-                        ></Delete>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            {itemList[date].map((item, index) => {
+              return (
+                <div className="d-flex mb-3 list-row" key={index}>
+                  <div className="col-9 text-left ml-2">
+                    <div className="name">
+                      <span>{item.name}</span>
+                      {item.isRecurring && (
+                        <Autorenew
+                          style={{ fontSize: "15px", marginBottom: "8px" }}
+                        ></Autorenew>
+                      )}
+                    </div>
+                    <div className="item-date">
+                      {dayjs(item.nextDateTime).format("HH:mm")}
+                    </div>
+                    <div className="details">{item.details}</div>
+                  </div>
+                  <div className="col-3 text-right">
+                    <Edit onClick={() => handleUpdateItem(item.id)}></Edit>
+                    <Delete onClick={() => handleDeleteItem(item.id)}></Delete>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         );
       })}

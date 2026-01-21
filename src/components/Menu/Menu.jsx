@@ -17,21 +17,6 @@ import { useData } from "../../store/DataContext";
 
 const drawerWidth = 240;
 const appBarHeight = 55;
-const defaultToolbarHeight = 64;
-
-export const setPageHeight = () => {
-  const height = window.innerHeight - defaultToolbarHeight;
-  const pageDivs = document.getElementsByClassName("page");
-  if (pageDivs.length > 0) {
-    const pageDiv = pageDivs[0];
-    pageDiv.style.height = height + "px";
-  }
-  const tableWrappers = document.getElementsByClassName("table-wrapper");
-  if (tableWrappers.length > 0) {
-    const tableWrapper = tableWrappers[0];
-    tableWrapper.style.maxHeight = 0.8 * height + "px";
-  }
-};
 
 function Menu({ children }) {
   const [isClosing, setIsClosing] = useState(false);

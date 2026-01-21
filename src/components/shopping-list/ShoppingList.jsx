@@ -4,7 +4,6 @@ import { useData } from "../../store/DataContext";
 import ShoppingListItemForm from "./ShoppingListItemForm";
 import PageHead from "../PageHead";
 import ShoppingListTable from "./ShoppingListTable";
-import { setPageHeight } from "../menu/Menu";
 
 function ShoppingList() {
   const [list, setList] = useState();
@@ -20,7 +19,6 @@ function ShoppingList() {
       return;
     }
 
-    setPageHeight();
     getListById(path, listId, setList);
   }, [listId]);
 
@@ -31,11 +29,13 @@ function ShoppingList() {
   return (
     <>
       <div className="page">
-        <PageHead title={list?.title} path={path} listId={listId}></PageHead>
+        <PageHead
+          title={list?.title}
+          path={path}
+          listId={listId}
+          handleNewItem={handleNewItem}
+        ></PageHead>
         <ShoppingListTable path={path} listId={listId}></ShoppingListTable>
-        <button className="btn btn-success bottom" onClick={handleNewItem}>
-          Tétel hozzáadása
-        </button>
       </div>
     </>
   );

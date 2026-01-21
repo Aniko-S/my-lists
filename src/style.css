@@ -1,8 +1,7 @@
 #root {
     width: 100vw;
     max-width: 100vw;
-    height: 100vh;
-    max-height: 100vh;
+    min-height: 100vh;
     padding: 0px;
     margin: 0px;
     background-color: #f8faf8;
@@ -39,16 +38,7 @@
 }
 
 .page {
-    position: relative;
-    padding: 10px;
-}
-
-.bottom {
-    position: absolute;
-    bottom: 0;
-    left: 50%; 
-    transform: translateX(-50%);
-    margin: 10px 0px;
+    padding: 0px 10px 10px 10px;
 }
 
 .table-wrapper {
@@ -69,10 +59,30 @@ td .name {
     font-size: 18px;
 }
 
-td .details {
+td .details, .details {
     font-size: 14px
 }
 
-td .date {
+td .date, .item-date {
     font-size: 12px
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 5px 0;
+    padding: 0;
+}
+
+.sticky {
+    position: sticky;
+    top: 55px;
+    background-color: #f8faf8;
+    z-index: 2;
+}
+
+.list-row:hover {
+    background-color: rgba(0,0,0,0.075);
 }
