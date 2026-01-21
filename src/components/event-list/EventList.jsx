@@ -36,9 +36,6 @@ function EventList() {
           handleNewItem={handleNewItem}
         ></PageHead>
         <EventListTable path={path} listId={listId}></EventListTable>
-        <button className="btn btn-success bottom" onClick={handleNewItem}>
-          Tétel hozzáadása
-        </button>
       </div>
     </>
   );

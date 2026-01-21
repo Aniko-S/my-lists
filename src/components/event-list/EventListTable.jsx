@@ -61,7 +61,9 @@ function EventListTable({ path, listId }) {
                       )}
                     </div>
                     <div className="item-date">
-                      {dayjs(item.nextDateTime).format("HH:mm")}
+                      {!item.isAllDay
+                        ? dayjs(item.nextDateTime).format("HH:mm")
+                        : ""}
                     </div>
                     <div className="details">{item.details}</div>
                   </div>

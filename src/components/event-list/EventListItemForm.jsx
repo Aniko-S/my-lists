@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Switch from "@mui/material/Switch";
-import { FormControlLabel } from "@mui/material";
+import { FormControlLabel, Checkbox } from "@mui/material";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import dayjs from "dayjs";
@@ -18,6 +18,7 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
     isRecurring: false,
     periodValue: 0,
     periodUnit: "day",
+    isAllDay: false,
   });
   const [itemId, setItemId] = useState();
   const [date, setDate] = useState(dayjs());
@@ -82,6 +83,11 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
     }
   };
 
+  const handleIsAllDayCheck = (e, item) => {
+    setItem({ ...item, isAllDay: e.target.checked });
+    setTime(dayjs(new Date().setHours(0, 0, 0)));
+  };
+
   return (
     <>
       <form
@@ -121,10 +127,26 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
           ></DateSetter>
         </div>
         <div className="my-3">
+          <FormControlLabel
+            control={
+              <Checkbox
+                color="success"
+                checked={item.isAllDay}
+                id="isAllDay"
+                slotProps={{ input: { "aria-label": "controlled" } }}
+                onChange={(e) => handleIsAllDayCheck(e, item)}
+              ></Checkbox>
+            }
+            label="Egész nap"
+          ></FormControlLabel>
+        </div>
+        <div className="my-3">
           <TimeSetter
             value={time}
             setValue={setTime}
             label={item.isRecurring ? "Kezdő idő" : "Idő"}
+            required={!item.isAllDay}
+            disabled={item.isAllDay}
           ></TimeSetter>
         </div>
         {item.isRecurring && (

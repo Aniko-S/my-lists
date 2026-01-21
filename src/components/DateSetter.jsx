@@ -25,6 +25,7 @@ function DateSetter({ value, setValue, label = "Dátum", required = true }) {
             slotProps={{
               textField: {
                 required: required,
+                fullWidth: true,
               },
             }}
           />

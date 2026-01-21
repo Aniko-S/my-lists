@@ -3,7 +3,13 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
-function TimeSetter({ value, setValue, label = "Idő", required = true }) {
+function TimeSetter({
+  value,
+  setValue,
+  label = "Idő",
+  required = true,
+  disabled,
+}) {
   const customLocalText = {
     okButtonLabel: "Ok",
     cancelButtonLabel: "Mégse",
@@ -24,8 +30,10 @@ function TimeSetter({ value, setValue, label = "Idő", required = true }) {
             slotProps={{
               textField: {
                 required: required,
+                fullWidth: true,
               },
             }}
+            disabled={disabled}
           />
         </DemoContainer>
       </LocalizationProvider>
