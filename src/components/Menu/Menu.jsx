@@ -32,7 +32,7 @@ function Menu({ children }) {
   return (
     <>
       <Modal></Modal>
-      <Box sx={{ display: "flex", height: "100%" }}>
+      <Box sx={{ display: "flex" }}>
         <CssBaseline></CssBaseline>
         <AppBar
           position="fixed"
@@ -43,12 +43,7 @@ function Menu({ children }) {
           }}
           color="success"
         >
-          <Toolbar
-            sx={{
-              minHeight: "100% !important",
-              height: "100%",
-            }}
-          >
+          <Toolbar>
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -65,7 +60,10 @@ function Menu({ children }) {
         </AppBar>
         <Box
           component="nav"
-          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+          sx={{
+            width: { sm: drawerWidth },
+            flexShrink: { sm: 0 },
+          }}
           aria-label="mailbox folders"
         >
           <DrawerOnMobile setIsClosing={setIsClosing}>

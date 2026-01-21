@@ -7,6 +7,7 @@ import { Add, ExpandLess, ExpandMore, Logout } from "@mui/icons-material";
 import { Link, replace, useNavigate } from "react-router";
 import { useData } from "../../store/DataContext";
 import CreateList from "../CreateList";
+import dayjs from "dayjs";
 
 function MenuData() {
   const [isShoppingListCollapseOpen, setIsShoppingListCollapseOpen] =
@@ -22,6 +23,7 @@ function MenuData() {
   const { showModal, hideModal, setIsMobileDrawerOpen } = useData();
 
   useEffect(() => {
+    console.log(user);
     return getLists("shopping-list", setShoppingLists);
   }, [user]);
 
@@ -102,9 +104,19 @@ function MenuData() {
 
   return (
     <>
-      <div style={{ backgroundColor: "#cce7c9", height: "100%" }}>
-        <div className="w-100 text-center">
-          <button className="btn my-3" onClick={handleClickOnSignOut}>
+      <div>
+        <div className="w-100 text-center mt-3">
+          <div>
+            <span>{dayjs().format("YYYY.MM.DD.")}</span>
+            <span>
+              &nbsp;
+              {new Date().toLocaleDateString("hu", {
+                weekday: "long",
+              })}
+            </span>
+          </div>
+          <div>{user?.email}</div>
+          <button className="btn" onClick={handleClickOnSignOut}>
             <Logout></Logout>
           </button>
         </div>

@@ -25,6 +25,7 @@ function DrawerOnMobile({ children, drawerWidth, setIsClosing }) {
           "& .MuiDrawer-paper": {
             boxSizing: "border-box",
             width: drawerWidth,
+            backgroundColor: "#cce7c9",
           },
         }}
         slotProps={{

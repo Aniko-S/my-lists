@@ -10,6 +10,7 @@ function DrawerOnDesktop({ children, drawerWidth }) {
           "& .MuiDrawer-paper": {
             boxSizing: "border-box",
             width: drawerWidth,
+            backgroundColor: "#cce7c9",
           },
         }}
         open

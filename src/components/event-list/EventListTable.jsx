@@ -48,7 +48,13 @@ function EventListTable({ path, listId }) {
         return (
           <div key={index}>
             <div className="text-left">
-              {dayjs(Number(date)).format("YYYY.MM.DD.")}
+              <span>{dayjs(Number(date)).format("YYYY.MM.DD.")}</span>
+              <span>
+                &nbsp;
+                {new Date(Number(date)).toLocaleDateString("hu", {
+                  weekday: "long",
+                })}
+              </span>
             </div>
             <hr></hr>
 

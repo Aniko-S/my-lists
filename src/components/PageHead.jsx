@@ -16,7 +16,7 @@ function PageHead({ title, path, listId, handleNewItem }) {
               style={{
                 stroke: "white",
                 strokeWidth: "2",
-                marginBottom: "5px",
+                marginBottom: "3px",
                 fontSize: "20px",
               }}
             ></Add>
@@ -33,6 +33,7 @@ function PageHead({ title, path, listId, handleNewItem }) {
             </Typography>
           </button>
         </div>
+
         <h2 className="col-8">{title}</h2>
         <SettingsDropdown path={path} listId={listId}></SettingsDropdown>
       </div>
