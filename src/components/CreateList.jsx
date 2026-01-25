@@ -23,6 +23,10 @@ function CreateList({ defaultType }) {
       value: "event-list",
       label: "eseménylista",
     },
+    {
+      value: "other-list",
+      label: "egyéb",
+    },
   ];
 
   useEffect(() => {

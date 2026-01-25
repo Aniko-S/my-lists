@@ -10,6 +10,8 @@ import {
   where,
   orderBy,
   or,
+  writeBatch,
+  getDocs,
 } from "firebase/firestore";
 import { createContext, useContext, useState } from "react";
 import { db } from "../config/firebase";
@@ -35,6 +37,7 @@ export const DataContextProvider = ({ children }) => {
     "shopping-list": "Bevásárlólisták",
     "todo-list": "Tennivalók",
     "event-list": "Események",
+    "other-list": "Egyéb",
   };
 
   const setNextDateTime = (item) => {
@@ -134,10 +137,10 @@ export const DataContextProvider = ({ children }) => {
     isSetDate,
   }) => {
     const orderByArray = order.map((item) =>
-      orderBy(item.name, item.direction || "asc")
+      orderBy(item.name, item.direction || "asc"),
     );
     const filterArray = filter.map((item) =>
-      where(item.name, item.rel, item.value)
+      where(item.name, item.rel, item.value),
     );
     const collectionRef = collection(db, `${path}/${listId}/items`);
     const q = query(collectionRef, ...orderByArray, or(...filterArray));
@@ -168,7 +171,7 @@ export const DataContextProvider = ({ children }) => {
           title: "Hiba",
           text: error?.message || "Hiba történt a művelet során.",
         });
-      }
+      },
     );
   };
 
@@ -270,6 +273,27 @@ export const DataContextProvider = ({ children }) => {
     }
   };
 
+  const deleteItemList = async (path, listId) => {
+    const collectionRef = collection(db, `${path}/${listId}/items`);
+    const q = query(collectionRef, where("checked", "==", true));
+    const batch = writeBatch(db);
+
+    try {
+      const docsToDelete = await getDocs(q);
+
+      docsToDelete.forEach((doc) => {
+        batch.delete(doc.ref);
+      });
+
+      await batch.commit();
+    } catch (error) {
+      showAlert({
+        title: "Hiba",
+        text: error?.message || "Hiba történt a művelet során.",
+      });
+    }
+  };
+
   const ctxValue = {
     isMobileDrawerOpen,
     setIsMobileDrawerOpen,
@@ -290,6 +314,7 @@ export const DataContextProvider = ({ children }) => {
     getItemById,
     createList,
     deleteList,
+    deleteItemList,
   };
 
   return <DataContext value={ctxValue}>{children}</DataContext>;

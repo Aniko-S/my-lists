@@ -14,16 +14,17 @@ function MenuData() {
     useState(true);
   const [isTodoListCollapseOpen, setIsTodoListCollapseOpen] = useState(true);
   const [isEventListCollapseOpen, setIsEventListCollapseOpen] = useState(true);
+  const [isOtherListCollapseOpen, setIsOtherListCollapseOpen] = useState(true);
 
   const [shoppingLists, setShoppingLists] = useState([]);
   const [todoLists, setTodoLists] = useState([]);
   const [eventLists, setEventLists] = useState([]);
+  const [otherLists, setOtherLists] = useState([]);
 
   const { user, handleSignOut } = useAuth();
   const { showModal, hideModal, setIsMobileDrawerOpen } = useData();
 
   useEffect(() => {
-    console.log(user);
     return getLists("shopping-list", setShoppingLists);
   }, [user]);
 
@@ -33,6 +34,10 @@ function MenuData() {
 
   useEffect(() => {
     return getLists("event-list", setEventLists);
+  }, [user]);
+
+  useEffect(() => {
+    return getLists("other-list", setOtherLists);
   }, [user]);
 
   const navigate = useNavigate();
@@ -99,6 +104,14 @@ function MenuData() {
       setIsOpen: setIsEventListCollapseOpen,
       lists: eventLists,
       path: "event-list",
+    },
+    {
+      id: 4,
+      title: "Egyéb",
+      isOpen: isOtherListCollapseOpen,
+      setIsOpen: setIsOtherListCollapseOpen,
+      lists: otherLists,
+      path: "other-list",
     },
   ];
 

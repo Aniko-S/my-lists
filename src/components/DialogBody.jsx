@@ -1,6 +1,6 @@
 import { useData } from "../store/DataContext";
 
-function DeleteList({ handleDelete }) {
+function DialogBody({ text, onOk }) {
   const { hideDialog } = useData();
 
   const handleClose = () => {
@@ -9,12 +9,12 @@ function DeleteList({ handleDelete }) {
 
   return (
     <>
-      <div className="text-center">Biztosan törli a listát?</div>
+      <div className="text-center">{text}</div>
       <div className="mt-5 d-flex justify-content-center">
         <button className="btn btn-secondary mx-3" onClick={handleClose}>
           Mégse
         </button>
-        <button className="btn btn-danger mx-3" onClick={handleDelete}>
+        <button className="btn btn-danger mx-3" onClick={onOk}>
           Törlés
         </button>
       </div>
@@ -22,4 +22,4 @@ function DeleteList({ handleDelete }) {
   );
 }
 
-export default DeleteList;
+export default DialogBody;

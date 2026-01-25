@@ -9,6 +9,7 @@ import TodoList from "./components/todo-list/TodoList";
 import EventList from "./components/event-list/EventList";
 import Menu from "./components/menu/Menu";
 import TodosEventsToday from "./components/TodosEventsToday";
+import OtherList from "./components/other-list/OtherList";
 
 function App() {
   return (
@@ -46,6 +47,14 @@ function App() {
                 element={
                   <Menu>
                     <EventList></EventList>
+                  </Menu>
+                }
+              ></Route>
+              <Route
+                path="/other-list/:id"
+                element={
+                  <Menu>
+                    <OtherList></OtherList>
                   </Menu>
                 }
               ></Route>

@@ -4,16 +4,33 @@ import { Dropdown } from "react-bootstrap";
 import { Settings } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import { useData } from "../store/DataContext";
-import DeleteList from "./DeleteList";
+import DialogBody from "./DialogBody";
 
 function SettingsDropdown({ path, listId }) {
-  const { deleteList, showDialog, hideDialog } = useData();
+  const { showDialog, hideDialog, deleteList, deleteItemList } = useData();
   const navigate = useNavigate();
 
-  const handleClickOnDelete = () => {
+  const handleClickOnDeleteList = () => {
     showDialog({
       title: "Lista törlése",
-      body: <DeleteList handleDelete={handleDeleteList}></DeleteList>,
+      body: (
+        <DialogBody
+          text="Biztosan törli a listát?"
+          onOk={handleDeleteList}
+        ></DialogBody>
+      ),
+    });
+  };
+
+  const handleClickOnDeleteItems = () => {
+    showDialog({
+      title: "Tételek törlése",
+      body: (
+        <DialogBody
+          text="Biztosan törli az összes kijelölt tételt?"
+          onOk={handleDeleteItems}
+        ></DialogBody>
+      ),
     });
   };
 
@@ -23,6 +40,11 @@ function SettingsDropdown({ path, listId }) {
     if (isDeleteSuccess) {
       navigate("/home");
     }
+  };
+
+  const handleDeleteItems = () => {
+    hideDialog();
+    deleteItemList(path, listId);
   };
 
   return (
@@ -48,10 +70,13 @@ function SettingsDropdown({ path, listId }) {
         </Dropdown.Toggle>
 
         <Dropdown.Menu>
-          <Dropdown.Item>Lista adatai</Dropdown.Item>
-          <Dropdown.Item>Lista megosztása</Dropdown.Item>
-          <Dropdown.Item onClick={handleClickOnDelete}>
+          {/* <Dropdown.Item>Lista adatai</Dropdown.Item>
+          <Dropdown.Item>Lista megosztása</Dropdown.Item> */}
+          <Dropdown.Item onClick={handleClickOnDeleteList}>
             Lista törlése
+          </Dropdown.Item>
+          <Dropdown.Item onClick={handleClickOnDeleteItems}>
+            Kijelölt tételek törlése
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
