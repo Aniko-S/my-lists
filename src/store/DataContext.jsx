@@ -294,6 +294,28 @@ export const DataContextProvider = ({ children }) => {
     }
   };
 
+  const copyList = async ({ newTitle, listId, path }) => {
+    const newListId = await createList(path, newTitle);
+    await copyItems(path, listId, newListId);
+    return newListId;
+  };
+
+  const copyItems = async (path, fromId, toId) => {
+    const batch = writeBatch(db);
+    const collectionRef = collection(db, `${path}/${fromId}/items`);
+    const snapshot = await getDocs(collectionRef);
+    const items = snapshot.docs.map((item) => {
+      return { ...item.data(), addedAt: new Date().getTime(), checked: false };
+    });
+
+    await items.forEach((item) => {
+      const docRef = doc(collection(db, `${path}/${toId}/items`));
+      batch.set(docRef, item);
+    });
+
+    await batch.commit();
+  };
+
   const ctxValue = {
     isMobileDrawerOpen,
     setIsMobileDrawerOpen,
@@ -315,6 +337,7 @@ export const DataContextProvider = ({ children }) => {
     createList,
     deleteList,
     deleteItemList,
+    copyList,
   };
 
   return <DataContext value={ctxValue}>{children}</DataContext>;

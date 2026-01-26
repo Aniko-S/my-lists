@@ -5,9 +5,11 @@ import { Settings } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import { useData } from "../store/DataContext";
 import DialogBody from "./DialogBody";
+import CopyListForm from "./CopyListForm";
 
 function SettingsDropdown({ path, listId }) {
-  const { showDialog, hideDialog, deleteList, deleteItemList } = useData();
+  const { showDialog, hideDialog, showModal, deleteList, deleteItemList } =
+    useData();
   const navigate = useNavigate();
 
   const handleClickOnDeleteList = () => {
@@ -31,6 +33,13 @@ function SettingsDropdown({ path, listId }) {
           onOk={handleDeleteItems}
         ></DialogBody>
       ),
+    });
+  };
+
+  const handleClickOnCopyList = () => {
+    showModal({
+      title: "Lista másolása",
+      body: <CopyListForm path={path} listId={listId}></CopyListForm>,
     });
   };
 
@@ -74,6 +83,9 @@ function SettingsDropdown({ path, listId }) {
           <Dropdown.Item>Lista megosztása</Dropdown.Item> */}
           <Dropdown.Item onClick={handleClickOnDeleteList}>
             Lista törlése
+          </Dropdown.Item>
+          <Dropdown.Item onClick={handleClickOnCopyList}>
+            Lista másolása
           </Dropdown.Item>
           <Dropdown.Item onClick={handleClickOnDeleteItems}>
             Kijelölt tételek törlése
