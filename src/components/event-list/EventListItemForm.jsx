@@ -155,9 +155,13 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
               label="Periódus értéke"
               required
               type="number"
+              inputProps={{ min: 1 }}
               value={item.periodValue}
               onChange={(e) =>
-                setItem({ ...item, periodValue: Number(e.target.value) })
+                setItem({
+                  ...item,
+                  periodValue: e.target.value ? Number(e.target.value) : "",
+                })
               }
             ></FormInput>
 
