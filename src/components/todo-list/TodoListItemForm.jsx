@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useData } from "../../store/DataContext";
 import { useParams } from "react-router";
+import FormInput from "../FormInput";
 
 function TodoListItemForm({ id, onUnmount = () => {} }) {
   const [item, setItem] = useState({ name: "", details: "" });
@@ -43,27 +44,24 @@ function TodoListItemForm({ id, onUnmount = () => {} }) {
           handleSave(e);
         }}
       >
-        <div className="form-group">
-          <label htmlFor="name">Teendő rövid megnevezése</label>
-          <input
-            id="name"
-            type="text"
-            className="form-control"
-            defaultValue={item.name}
-            onChange={(e) => setItem({ ...item, name: e.target.value })}
-            autoFocus
-          ></input>
-        </div>
-        <div className="form-group">
-          <label htmlFor="details">Részletek</label>
-          <textarea
-            id="details"
-            className="form-control"
-            rows={4}
-            defaultValue={item.details}
-            onChange={(e) => setItem({ ...item, details: e.target.value })}
-          ></textarea>
-        </div>
+        <FormInput
+          id="name"
+          label="Teendő rövid megnevezése"
+          required
+          autoFocus
+          value={item.name}
+          onChange={(e) => setItem({ ...item, name: e.target.value })}
+        ></FormInput>
+
+        <FormInput
+          id="details"
+          label="Részletek"
+          multiline
+          rows={4}
+          value={item.details}
+          onChange={(e) => setItem({ ...item, details: e.target.value })}
+        ></FormInput>
+
         <div className="mt-5 d-flex justify-content-center">
           <button
             type="reset"

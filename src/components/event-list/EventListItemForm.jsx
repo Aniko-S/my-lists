@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import TextField from "@mui/material/TextField";
 import Switch from "@mui/material/Switch";
 import { FormControlLabel, Checkbox } from "@mui/material";
 import ToggleButton from "@mui/material/ToggleButton";
@@ -9,6 +8,7 @@ import { useParams } from "react-router";
 import { useData } from "../../store/DataContext";
 import DateSetter from "../DateSetter";
 import TimeSetter from "../TimeSetter";
+import FormInput from "../FormInput";
 
 function EventListItemForm({ id, onUnmount = () => {} }) {
   const [item, setItem] = useState({
@@ -94,14 +94,14 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
           handleSave(e);
         }}
       >
-        <TextField
-          required
+        <FormInput
           id="name"
           label="Megnevezés"
-          fullWidth
-          onChange={(e) => setItem({ ...item, name: e.target.value })}
+          required
+          autoFocus
           value={item.name}
-        ></TextField>
+          onChange={(e) => setItem({ ...item, name: e.target.value })}
+        ></FormInput>
 
         <div className="my-3">
           <FormControlLabel
@@ -150,18 +150,16 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
         </div>
         {item.isRecurring && (
           <div>
-            <TextField
-              required
+            <FormInput
               id="periodValue"
               label="Periódus értéke"
+              required
               type="number"
-              fullWidth
-              margin="normal"
               value={item.periodValue}
               onChange={(e) =>
                 setItem({ ...item, periodValue: Number(e.target.value) })
               }
-            ></TextField>
+            ></FormInput>
 
             <div className="my-3">
               <ToggleButtonGroup
@@ -178,7 +176,7 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
                       value={key}
                       sx={{
                         "&.MuiToggleButton-root:hover": {
-                          color: "green", //use the color you want
+                          color: "green",
                         },
                       }}
                     >

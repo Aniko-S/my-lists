@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useData } from "../store/DataContext";
-import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router";
+import FormInput from "./FormInput";
 
 function CopyListForm({ path, listId }) {
   const [title, setTitle] = useState("");
@@ -23,14 +23,12 @@ function CopyListForm({ path, listId }) {
         tételei nem lesznek kijelölve.
       </div>
       <form onSubmit={(e) => handleClickOnCreate(e)}>
-        <TextField
-          required
+        <FormInput
           id="name"
           label="Az új lista címe"
-          fullWidth
+          required
           onChange={(e) => setTitle(e.target.value)}
-          autoFocus
-        ></TextField>
+        ></FormInput>
 
         <div className="mt-5 d-flex justify-content-center">
           <button

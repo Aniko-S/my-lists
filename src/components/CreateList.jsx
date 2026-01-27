@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import Select from "react-select";
 import { useData } from "../store/DataContext";
 import { useNavigate } from "react-router";
+import { InputLabel, MenuItem, FormControl, Select } from "@mui/material";
+import FormInput from "./FormInput";
 
 function CreateList({ defaultType }) {
   const [selectedType, setSelectedType] = useState({ value: "" });
@@ -50,27 +51,33 @@ function CreateList({ defaultType }) {
           handleSave(e);
         }}
       >
-        <div className="form-group">
-          <label htmlFor="name">Lista típusa</label>
+        <FormControl fullWidth size="small">
+          <InputLabel id="type-label">Lista típusa</InputLabel>
           <Select
-            options={listTypes}
-            isSearchable={false}
-            value={selectedType ? selectedType : ""}
+            labelId="type-label"
+            id="type"
+            value={selectedType ? selectedType.value : ""}
+            label="Lista típusa"
             onChange={(selectedItem) => {
               setSelectedType(selectedItem);
             }}
-          ></Select>
-        </div>
-        <div className="form-group">
-          <label htmlFor="name">Lista címe</label>
-          <input
-            id="name"
-            type="text"
-            className="form-control"
-            onChange={(e) => setTitle(e.target.value)}
-            autoFocus
-          ></input>
-        </div>
+          >
+            {listTypes.map((type, index) => (
+              <MenuItem id={index} value={type.value}>
+                {type.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <FormInput
+          id="name"
+          label="Lista címe"
+          required
+          autoFocus
+          onChange={(e) => setTitle(e.target.value)}
+        ></FormInput>
+
         <div className="mt-5 d-flex justify-content-center">
           <button
             type="reset"

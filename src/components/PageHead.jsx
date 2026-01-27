@@ -1,6 +1,6 @@
 import { Add } from "@mui/icons-material";
-import SettingsDropdown from "./SettingsDropdown";
 import { Typography } from "@mui/material";
+import SettingsDropdown from "./SettingsDropdown";
 
 function PageHead({ title, path, listId, handleNewItem }) {
   return (
