@@ -44,24 +44,7 @@ function ShoppingListItemForm({ id, onUnmount = () => {} }) {
           handleSave(e);
         }}
       >
-        <FormInput
-          id="name"
-          label="Tétel rövid megnevezése"
-          required
-          autoFocus
-          value={item.name}
-          onChange={(e) => setItem({ ...item, name: e.target.value })}
-        ></FormInput>
-        <FormInput
-          id="details"
-          label="Részletek"
-          multiline
-          rows={4}
-          value={item.details}
-          onChange={(e) => setItem({ ...item, details: e.target.value })}
-        ></FormInput>
-
-        <div className="mt-5 d-flex justify-content-center">
+        <div className="mb-3 d-flex justify-content-center">
           <button
             type="reset"
             className="btn btn-secondary mx-3"
@@ -72,6 +55,25 @@ function ShoppingListItemForm({ id, onUnmount = () => {} }) {
           <button type="submit" className="btn btn-success mx-3">
             Mentés
           </button>
+        </div>
+
+        <div className="modal-form-body">
+          <FormInput
+            id="name"
+            label="Tétel rövid megnevezése"
+            required
+            autoFocus
+            value={item.name}
+            onChange={(e) => setItem({ ...item, name: e.target.value })}
+          ></FormInput>
+          <FormInput
+            id="details"
+            label="Részletek"
+            multiline
+            rows={4}
+            value={item.details}
+            onChange={(e) => setItem({ ...item, details: e.target.value })}
+          ></FormInput>
         </div>
       </form>
     </>

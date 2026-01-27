@@ -18,19 +18,8 @@ function CopyListForm({ path, listId }) {
 
   return (
     <>
-      <div className="text-center my-3">
-        Létrehozunk egy új listát a másolt lista összes tételével. Az új lista
-        tételei nem lesznek kijelölve.
-      </div>
       <form onSubmit={(e) => handleClickOnCreate(e)}>
-        <FormInput
-          id="name"
-          label="Az új lista címe"
-          required
-          onChange={(e) => setTitle(e.target.value)}
-        ></FormInput>
-
-        <div className="mt-5 d-flex justify-content-center">
+        <div className="mb-3 d-flex justify-content-center">
           <button
             type="reset"
             className="btn btn-secondary mx-3"
@@ -41,6 +30,19 @@ function CopyListForm({ path, listId }) {
           <button type="submit" className="btn btn-success mx-3">
             Létrehozás
           </button>
+        </div>
+
+        <div className="modal-form-body">
+          <div className="text-center my-3">
+            Létrehozunk egy új listát a másolt lista összes tételével. Az új
+            lista tételei nem lesznek kijelölve.
+          </div>
+          <FormInput
+            id="name"
+            label="Az új lista címe"
+            required
+            onChange={(e) => setTitle(e.target.value)}
+          ></FormInput>
         </div>
       </form>
     </>

@@ -26,7 +26,12 @@
 
 .modal {
     margin-top: 55px;
-    max-height: 80%;
+}
+
+.modal-form-body {
+    max-height: 60vh;
+    overflow: auto;
+    margin-bottom: 20px;
 }
 
 .closeButton {

@@ -94,105 +94,7 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
           handleSave(e);
         }}
       >
-        <FormInput
-          id="name"
-          label="Megnevezés"
-          required
-          autoFocus
-          value={item.name}
-          onChange={(e) => setItem({ ...item, name: e.target.value })}
-        ></FormInput>
-
-        <div className="my-3">
-          <FormControlLabel
-            control={
-              <Switch
-                checked={item.isRecurring}
-                onChange={(e) =>
-                  setItem({ ...item, isRecurring: e.target.checked })
-                }
-                slotProps={{ input: { "aria-label": "controlled" } }}
-                color="success"
-              />
-            }
-            label="Ismétlődő"
-          ></FormControlLabel>
-        </div>
-        <div className="my-3">
-          <DateSetter
-            value={date}
-            setValue={setDate}
-            label={item.isRecurring ? "Kezdő dátum" : "Dátum"}
-          ></DateSetter>
-        </div>
-        <div className="my-3">
-          <FormControlLabel
-            control={
-              <Checkbox
-                color="success"
-                checked={item.isAllDay}
-                id="isAllDay"
-                slotProps={{ input: { "aria-label": "controlled" } }}
-                onChange={(e) => handleIsAllDayCheck(e, item)}
-              ></Checkbox>
-            }
-            label="Egész nap"
-          ></FormControlLabel>
-        </div>
-        <div className="my-3">
-          <TimeSetter
-            value={time}
-            setValue={setTime}
-            label={item.isRecurring ? "Kezdő idő" : "Idő"}
-            required={!item.isAllDay}
-            disabled={item.isAllDay}
-          ></TimeSetter>
-        </div>
-        {item.isRecurring && (
-          <div>
-            <FormInput
-              id="periodValue"
-              label="Periódus értéke"
-              required
-              type="number"
-              inputProps={{ min: 1 }}
-              value={item.periodValue}
-              onChange={(e) =>
-                setItem({
-                  ...item,
-                  periodValue: e.target.value ? Number(e.target.value) : "",
-                })
-              }
-            ></FormInput>
-
-            <div className="my-3">
-              <ToggleButtonGroup
-                aria-label="Period unit"
-                fullWidth
-                value={item.periodUnit}
-                onChange={(e) =>
-                  setItem({ ...item, periodUnit: e.target.value })
-                }
-              >
-                {Object.keys(unitList).map((key) => {
-                  return (
-                    <ToggleButton
-                      value={key}
-                      sx={{
-                        "&.MuiToggleButton-root:hover": {
-                          color: "green",
-                        },
-                      }}
-                    >
-                      {unitList[key]}
-                    </ToggleButton>
-                  );
-                })}
-              </ToggleButtonGroup>
-            </div>
-          </div>
-        )}
-        <div className="mt-5 d-flex justify-content-center">
+        <div className="mb-3 d-flex justify-content-center">
           <button
             type="reset"
             className="btn btn-secondary mx-3"
@@ -203,6 +105,107 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
           <button type="submit" className="btn btn-success mx-3">
             Mentés
           </button>
+        </div>
+
+        <div className="modal-form-body">
+          <FormInput
+            id="name"
+            label="Megnevezés"
+            required
+            autoFocus
+            value={item.name}
+            onChange={(e) => setItem({ ...item, name: e.target.value })}
+          ></FormInput>
+
+          <div className="my-3">
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={item.isRecurring}
+                  onChange={(e) =>
+                    setItem({ ...item, isRecurring: e.target.checked })
+                  }
+                  slotProps={{ input: { "aria-label": "controlled" } }}
+                  color="success"
+                />
+              }
+              label="Ismétlődő"
+            ></FormControlLabel>
+          </div>
+          <div className="my-3">
+            <DateSetter
+              value={date}
+              setValue={setDate}
+              label={item.isRecurring ? "Kezdő dátum" : "Dátum"}
+            ></DateSetter>
+          </div>
+          <div className="my-3">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  color="success"
+                  checked={item.isAllDay}
+                  id="isAllDay"
+                  slotProps={{ input: { "aria-label": "controlled" } }}
+                  onChange={(e) => handleIsAllDayCheck(e, item)}
+                ></Checkbox>
+              }
+              label="Egész nap"
+            ></FormControlLabel>
+          </div>
+          <div className="my-3">
+            <TimeSetter
+              value={time}
+              setValue={setTime}
+              label={item.isRecurring ? "Kezdő idő" : "Idő"}
+              required={!item.isAllDay}
+              disabled={item.isAllDay}
+            ></TimeSetter>
+          </div>
+          {item.isRecurring && (
+            <div>
+              <FormInput
+                id="periodValue"
+                label="Periódus értéke"
+                required
+                type="number"
+                inputProps={{ min: 1 }}
+                value={item.periodValue}
+                onChange={(e) =>
+                  setItem({
+                    ...item,
+                    periodValue: e.target.value ? Number(e.target.value) : "",
+                  })
+                }
+              ></FormInput>
+
+              <div className="my-3">
+                <ToggleButtonGroup
+                  aria-label="Period unit"
+                  fullWidth
+                  value={item.periodUnit}
+                  onChange={(e) =>
+                    setItem({ ...item, periodUnit: e.target.value })
+                  }
+                >
+                  {Object.keys(unitList).map((key) => {
+                    return (
+                      <ToggleButton
+                        value={key}
+                        sx={{
+                          "&.MuiToggleButton-root:hover": {
+                            color: "green",
+                          },
+                        }}
+                      >
+                        {unitList[key]}
+                      </ToggleButton>
+                    );
+                  })}
+                </ToggleButtonGroup>
+              </div>
+            </div>
+          )}
         </div>
       </form>
     </>
