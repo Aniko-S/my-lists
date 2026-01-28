@@ -30,7 +30,7 @@ function SettingsDropdown({ path, listId }) {
       body: (
         <DialogBody
           text="Biztosan törli az összes kijelölt tételt?"
-          onOk={handleDeleteItems}
+          onOk={() => deleteItemList(path, listId)}
         ></DialogBody>
       ),
     });
@@ -44,16 +44,10 @@ function SettingsDropdown({ path, listId }) {
   };
 
   const handleDeleteList = async () => {
-    hideDialog();
     const isDeleteSuccess = await deleteList(path, listId);
     if (isDeleteSuccess) {
       navigate("/home");
     }
-  };
-
-  const handleDeleteItems = () => {
-    hideDialog();
-    deleteItemList(path, listId);
   };
 
   return (

@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
-import TodoListItemForm from "./TodoListItemForm";
 import { useData } from "../../store/DataContext";
 import { Autorenew, Delete, Edit } from "@mui/icons-material";
-import dayjs from "dayjs";
 import { Checkbox } from "@mui/material";
+import dayjs from "dayjs";
+import TodoListItemForm from "./TodoListItemForm";
+import DialogBody from "../DialogBody";
 
 function TodoListTable({ path, listId }) {
   const [itemList, setItemList] = useState({});
   const [order, setOrder] = useState([{ name: "addedAt", direction: "asc" }]);
   const [dateList, setDateList] = useState([]);
-  const { setItemListSnapshot, showModal, deleteItem, updateItem } = useData();
+  const { setItemListSnapshot, showModal, showDialog, deleteItem, updateItem } =
+    useData();
 
   useEffect(() => {
     if (!listId) {
@@ -49,8 +51,20 @@ function TodoListTable({ path, listId }) {
     showModal({ body: <TodoListItemForm id={id}></TodoListItemForm> });
   };
 
-  const handleDeleteItem = (itemId) => {
-    deleteItem(path, listId, itemId);
+  const handleDeleteItem = (item) => {
+    if (item.isRecurring) {
+      showDialog({
+        title: "Tétel törlése",
+        body: (
+          <DialogBody
+            text="A tétel ismétlődő. Biztosan minden alkalmat törölni szeretne?"
+            onOk={() => deleteItem(path, listId, item.id)}
+          ></DialogBody>
+        ),
+      });
+    } else {
+      deleteItem(path, listId, item.id);
+    }
   };
 
   const handleCheck = (event, item) => {
@@ -105,7 +119,7 @@ function TodoListTable({ path, listId }) {
                   </div>
                   <div className="col-3 text-right">
                     <Edit onClick={() => handleUpdateItem(item.id)}></Edit>
-                    <Delete onClick={() => handleDeleteItem(item.id)}></Delete>
+                    <Delete onClick={() => handleDeleteItem(item)}></Delete>
                   </div>
                 </div>
               );

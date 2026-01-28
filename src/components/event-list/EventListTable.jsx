@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import EventListItemForm from "./EventListItemForm";
 import { useData } from "../../store/DataContext";
 import { Autorenew, Delete, Edit } from "@mui/icons-material";
 import dayjs from "dayjs";
+import EventListItemForm from "./EventListItemForm";
+import DialogBody from "../DialogBody";
 
 function EventListTable({ path, listId }) {
   const [itemList, setItemList] = useState({});
   const [order, setOrder] = useState([{ name: "dateTime", direction: "asc" }]);
   const [dateList, setDateList] = useState([]);
-  const { setItemListSnapshot, showModal, deleteItem } = useData();
+  const { setItemListSnapshot, showModal, showDialog, deleteItem } = useData();
 
   useEffect(() => {
     if (!listId) {
@@ -38,8 +39,20 @@ function EventListTable({ path, listId }) {
     showModal({ body: <EventListItemForm id={id}></EventListItemForm> });
   };
 
-  const handleDeleteItem = (itemId) => {
-    deleteItem(path, listId, itemId);
+  const handleDeleteItem = (item) => {
+    if (item.isRecurring) {
+      showDialog({
+        title: "Tétel törlése",
+        body: (
+          <DialogBody
+            text="A tétel ismétlődő. Biztosan minden alkalmat törölni szeretne?"
+            onOk={() => deleteItem(path, listId, item.id)}
+          ></DialogBody>
+        ),
+      });
+    } else {
+      deleteItem(path, listId, item.id);
+    }
   };
 
   return (
@@ -79,7 +92,7 @@ function EventListTable({ path, listId }) {
                   </div>
                   <div className="col-3 text-right">
                     <Edit onClick={() => handleUpdateItem(item.id)}></Edit>
-                    <Delete onClick={() => handleDeleteItem(item.id)}></Delete>
+                    <Delete onClick={() => handleDeleteItem(item)}></Delete>
                   </div>
                 </div>
               );
