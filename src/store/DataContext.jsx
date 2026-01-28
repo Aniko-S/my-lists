@@ -135,6 +135,7 @@ export const DataContextProvider = ({ children }) => {
     filter = [],
     setter,
     isSetDate,
+    everyItemHasDate = true,
   }) => {
     const orderByArray = order.map((item) =>
       orderBy(item.name, item.direction || "asc"),
@@ -158,12 +159,28 @@ export const DataContextProvider = ({ children }) => {
           return;
         }
 
-        data.forEach((item) => {
+        const itemsWithoutDate = everyItemHasDate
+          ? []
+          : data.filter((item) => !item.hasDate);
+        let itemsWithDate = everyItemHasDate
+          ? data
+          : data.filter((item) => item.hasDate);
+
+        itemsWithDate.forEach((item) => {
           setNextDateTime(item);
           setNextDate(item);
         });
-        data = Object.groupBy(data, ({ nextDate }) => nextDate);
-        setter(data);
+
+        itemsWithDate = Object.groupBy(
+          itemsWithDate,
+          ({ nextDate }) => nextDate,
+        );
+
+        setter(
+          itemsWithoutDate.length == 0
+            ? itemsWithDate
+            : { noDate: itemsWithoutDate, ...itemsWithDate },
+        );
       },
       (error) => {
         console.log(error);

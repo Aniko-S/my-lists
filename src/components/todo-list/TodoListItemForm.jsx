@@ -11,11 +11,15 @@ import FormInput from "../FormInput";
 
 function TodoListItemForm({ id, onUnmount = () => {} }) {
   const [item, setItem] = useState({
+    name: "",
+    details: "",
+    hasDate: false,
+    isRecurring: false,
     periodUnit: "day",
     periodValue: 1,
   });
   const [itemId, setItemId] = useState();
-  const [date, setDate] = useState(dayjs());
+  const [date, setDate] = useState(dayjs(new Date().setHours(0, 0, 0, 0)));
 
   const { setModalTitle, hideModal, createItem, getItemById, updateItem } =
     useData();
@@ -34,7 +38,7 @@ function TodoListItemForm({ id, onUnmount = () => {} }) {
     if (id) {
       getItemById(path, listId, id, (data) => {
         setItem(data);
-        setDate(dayjs(data.date));
+        setDate(dayjs(data.dateTime));
       });
 
       setItemId(id);
@@ -48,8 +52,8 @@ function TodoListItemForm({ id, onUnmount = () => {} }) {
 
   const handleSave = (e) => {
     e.preventDefault();
-    item.date = new Date(date).getTime();
     item.checked = false;
+    item.dateTime = item.hasDate ? new Date(date).getTime() : null; // this property is needed because of the filter
     deleteUnnecessaryProps();
 
     if (itemId) {
@@ -66,7 +70,6 @@ function TodoListItemForm({ id, onUnmount = () => {} }) {
     }
 
     if (!item.hasDate) {
-      delete item.date;
       delete item.isRecurring;
     }
   };
@@ -97,7 +100,7 @@ function TodoListItemForm({ id, onUnmount = () => {} }) {
             label="Megnevezés"
             required
             autoFocus
-            value={item.name || ""}
+            value={item.name}
             onChange={(e) => setItem({ ...item, name: e.target.value })}
           ></FormInput>
 
@@ -106,7 +109,7 @@ function TodoListItemForm({ id, onUnmount = () => {} }) {
             label="Részletek"
             multiline
             rows={4}
-            value={item.details || ""}
+            value={item.details}
             onChange={(e) => setItem({ ...item, details: e.target.value })}
           ></FormInput>
 
@@ -114,7 +117,7 @@ function TodoListItemForm({ id, onUnmount = () => {} }) {
             <FormControlLabel
               control={
                 <Switch
-                  checked={item.hasDate || false}
+                  checked={item.hasDate}
                   onChange={(e) =>
                     setItem({ ...item, hasDate: e.target.checked })
                   }
@@ -132,7 +135,7 @@ function TodoListItemForm({ id, onUnmount = () => {} }) {
                 <FormControlLabel
                   control={
                     <Switch
-                      checked={item.isRecurring || false}
+                      checked={item.isRecurring}
                       onChange={(e) =>
                         setItem({ ...item, isRecurring: e.target.checked })
                       }

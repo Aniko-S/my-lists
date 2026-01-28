@@ -1,16 +1,14 @@
-import { Delete, Edit } from "@mui/icons-material";
-import { Checkbox } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useData } from "../../store/DataContext";
 import TodoListItemForm from "./TodoListItemForm";
+import { useData } from "../../store/DataContext";
+import { Autorenew, Delete, Edit } from "@mui/icons-material";
+import dayjs from "dayjs";
 
 function TodoListTable({ path, listId }) {
-  const [itemList, setItemList] = useState([]);
-  const [order, setOrder] = useState([
-    { name: "checked", direction: "asc" },
-    { name: "addedAt", direction: "desc" },
-  ]);
-  const { setItemListSnapshot, showModal, updateItem, deleteItem } = useData();
+  const [itemList, setItemList] = useState({});
+  const [order, setOrder] = useState([{ name: "addedAt", direction: "asc" }]);
+  const [dateList, setDateList] = useState([]);
+  const { setItemListSnapshot, showModal, deleteItem } = useData();
 
   useEffect(() => {
     if (!listId) {
@@ -21,19 +19,33 @@ function TodoListTable({ path, listId }) {
       path,
       listId,
       order,
+      filter: [
+        { name: "hasDate", rel: "==", value: false },
+        { name: "isRecurring", rel: "==", value: true },
+        { name: "dateTime", rel: ">=", value: new Date().setHours(0, 0, 0, 0) },
+      ],
       setter: (data) => {
         setItemList(data);
+        const keys = Object.keys(data);
+
+        let sortedDateList = keys.filter((key) => key !== "noDate").toSorted();
+
+        setDateList(
+          keys.includes("noDate")
+            ? ["noDate", ...sortedDateList]
+            : sortedDateList,
+        );
       },
+      isSetDate: true,
+      everyItemHasDate: false,
+      hasTime: false,
     });
+
     return () => getDataUnsub();
   }, [listId]);
 
   const handleUpdateItem = (id) => {
     showModal({ body: <TodoListItemForm id={id}></TodoListItemForm> });
-  };
-
-  const handleCheck = (event, id) => {
-    updateItem(path, listId, id, { checked: event.target.checked });
   };
 
   const handleDeleteItem = (itemId) => {
@@ -42,45 +54,49 @@ function TodoListTable({ path, listId }) {
 
   return (
     <>
-      <div className="table-wrapper">
-        <table className="table table-hover">
-          <thead>
-            <tr>
-              <th style={{ width: "60px" }}>Kész</th>
-              <th>Megnevezés</th>
-              <th style={{ width: "120px" }}>Műveletek</th>
-            </tr>
-          </thead>
-          <tbody>
-            {itemList.map((item) => {
+      {dateList.map((date, index) => {
+        return (
+          <div key={index}>
+            <div className="text-left">
+              {date == "noDate" && <div>Dátum nélkül</div>}
+              {date != "noDate" && (
+                <div>
+                  <span>{dayjs(Number(date)).format("YYYY.MM.DD.")}</span>
+                  <span>
+                    &nbsp;
+                    {new Date(Number(date)).toLocaleDateString("hu", {
+                      weekday: "long",
+                    })}
+                  </span>
+                </div>
+              )}
+            </div>
+            <hr></hr>
+
+            {itemList[date].map((item, index) => {
               return (
-                <tr key={item.id}>
-                  <td>
-                    <Checkbox
-                      color="success"
-                      checked={item.checked}
-                      id={item.id}
-                      onChange={(e) => handleCheck(e, item.id)}
-                      className="p-0"
-                    ></Checkbox>
-                  </td>
-                  <td>
-                    <div className={"name" + (item.checked ? " checked" : "")}>
-                      {item.name}
+                <div className="d-flex mb-3 list-row" key={index}>
+                  <div className="col-9 text-left ml-2">
+                    <div className="name">
+                      <span>{item.name}</span>
+                      {item.isRecurring && (
+                        <Autorenew
+                          style={{ fontSize: "15px", marginBottom: "8px" }}
+                        ></Autorenew>
+                      )}
                     </div>
                     <div className="details">{item.details}</div>
-                  </td>
-
-                  <td>
+                  </div>
+                  <div className="col-3 text-right">
                     <Edit onClick={() => handleUpdateItem(item.id)}></Edit>
                     <Delete onClick={() => handleDeleteItem(item.id)}></Delete>
-                  </td>
-                </tr>
+                  </div>
+                </div>
               );
             })}
-          </tbody>
-        </table>
-      </div>
+          </div>
+        );
+      })}
     </>
   );
 }
