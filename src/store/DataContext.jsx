@@ -47,7 +47,7 @@ export const DataContextProvider = ({ children }) => {
       return;
     }
 
-    const today = new Date().setHours(0, 0, 0);
+    const today = new Date().setHours(0, 0, 0, 0);
 
     while (item.nextDateTime < today) {
       let date = new Date(item.nextDateTime);
@@ -136,6 +136,7 @@ export const DataContextProvider = ({ children }) => {
     setter,
     isSetDate,
     everyItemHasDate = true,
+    setChecked,
   }) => {
     const orderByArray = order.map((item) =>
       orderBy(item.name, item.direction || "asc"),
@@ -169,6 +170,9 @@ export const DataContextProvider = ({ children }) => {
         itemsWithDate.forEach((item) => {
           setNextDateTime(item);
           setNextDate(item);
+          if (setChecked && item.isRecurring) {
+            item.checked = item.lastTimeCompleted == item.nextDateTime;
+          }
         });
 
         itemsWithDate = Object.groupBy(

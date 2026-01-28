@@ -52,25 +52,26 @@ function TodoListItemForm({ id, onUnmount = () => {} }) {
 
   const handleSave = (e) => {
     e.preventDefault();
+    if (itemId) {
+      deleteUnnecessaryProps();
+      updateItem(path, listId, itemId, item);
+      return;
+    }
+
     item.checked = false;
     item.dateTime = item.hasDate ? new Date(date).getTime() : null; // this property is needed because of the filter
     deleteUnnecessaryProps();
-
-    if (itemId) {
-      updateItem(path, listId, itemId, item);
-    } else {
-      createItem(path, listId, item);
-    }
+    createItem(path, listId, item);
   };
 
   const deleteUnnecessaryProps = () => {
+    if (!item.hasDate) {
+      delete item.isRecurring;
+    }
+
     if (!item.isRecurring) {
       delete item.periodUnit;
       delete item.periodValue;
-    }
-
-    if (!item.hasDate) {
-      delete item.isRecurring;
     }
   };
 

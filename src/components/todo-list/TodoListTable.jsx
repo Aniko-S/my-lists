@@ -3,12 +3,13 @@ import TodoListItemForm from "./TodoListItemForm";
 import { useData } from "../../store/DataContext";
 import { Autorenew, Delete, Edit } from "@mui/icons-material";
 import dayjs from "dayjs";
+import { Checkbox } from "@mui/material";
 
 function TodoListTable({ path, listId }) {
   const [itemList, setItemList] = useState({});
   const [order, setOrder] = useState([{ name: "addedAt", direction: "asc" }]);
   const [dateList, setDateList] = useState([]);
-  const { setItemListSnapshot, showModal, deleteItem } = useData();
+  const { setItemListSnapshot, showModal, deleteItem, updateItem } = useData();
 
   useEffect(() => {
     if (!listId) {
@@ -19,6 +20,9 @@ function TodoListTable({ path, listId }) {
       path,
       listId,
       order,
+      isSetDate: true,
+      everyItemHasDate: false,
+      setChecked: true,
       filter: [
         { name: "hasDate", rel: "==", value: false },
         { name: "isRecurring", rel: "==", value: true },
@@ -36,9 +40,6 @@ function TodoListTable({ path, listId }) {
             : sortedDateList,
         );
       },
-      isSetDate: true,
-      everyItemHasDate: false,
-      hasTime: false,
     });
 
     return () => getDataUnsub();
@@ -50,6 +51,13 @@ function TodoListTable({ path, listId }) {
 
   const handleDeleteItem = (itemId) => {
     deleteItem(path, listId, itemId);
+  };
+
+  const handleCheck = (event, item) => {
+    const updatedData = !item.isRecurring
+      ? { checked: event.target.checked }
+      : { lastTimeCompleted: event.target.checked ? item.nextDateTime : null };
+    updateItem(path, listId, item.id, updatedData);
   };
 
   return (
@@ -77,14 +85,22 @@ function TodoListTable({ path, listId }) {
               return (
                 <div className="d-flex mb-3 list-row" key={index}>
                   <div className="col-9 text-left ml-2">
-                    <div className="name">
-                      <span>{item.name}</span>
-                      {item.isRecurring && (
-                        <Autorenew
-                          style={{ fontSize: "15px", marginBottom: "8px" }}
-                        ></Autorenew>
-                      )}
-                    </div>
+                    <Checkbox
+                      color="success"
+                      checked={item.checked}
+                      id={item.id}
+                      onChange={(e) => handleCheck(e, item)}
+                      className="p-0 mr-2"
+                    ></Checkbox>
+                    <span className={"name" + (item.checked ? " checked" : "")}>
+                      {item.name}
+                    </span>
+                    {item.isRecurring && (
+                      <Autorenew
+                        style={{ fontSize: "15px", marginBottom: "8px" }}
+                      ></Autorenew>
+                    )}
+
                     <div className="details">{item.details}</div>
                   </div>
                   <div className="col-3 text-right">
