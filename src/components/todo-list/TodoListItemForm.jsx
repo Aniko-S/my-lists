@@ -54,15 +54,15 @@ function TodoListItemForm({ id, onUnmount = () => {} }) {
 
   const handleSave = (e) => {
     e.preventDefault();
+    item.dateTime = item.hasDate ? new Date(date).getTime() : null; // this property is needed because of the filter
+    deleteUnnecessaryProps();
+
     if (itemId) {
-      deleteUnnecessaryProps();
       updateItem(path, listId, itemId, item);
       return;
     }
 
     item.checked = false;
-    item.dateTime = item.hasDate ? new Date(date).getTime() : null; // this property is needed because of the filter
-    deleteUnnecessaryProps();
     createItem(path, listId, item);
   };
 
