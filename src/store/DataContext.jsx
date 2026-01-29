@@ -210,7 +210,7 @@ export const DataContextProvider = ({ children }) => {
   };
 
   const createItem = async (path, listId, item) => {
-    item.addedAt = new Date();
+    item.addedAt = new Date().getTime();
     const collectionRef = collection(db, `${path}/${listId}/items`);
     try {
       await addDoc(collectionRef, item);
