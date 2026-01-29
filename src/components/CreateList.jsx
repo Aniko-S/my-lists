@@ -5,7 +5,7 @@ import { InputLabel, MenuItem, FormControl, Select } from "@mui/material";
 import FormInput from "./FormInput";
 
 function CreateList({ defaultType }) {
-  const [selectedType, setSelectedType] = useState({ value: "" });
+  const [selectedType, setSelectedType] = useState(defaultType);
   const [title, setTitle] = useState();
 
   const { hideModal, createList } = useData();
@@ -30,14 +30,9 @@ function CreateList({ defaultType }) {
     },
   ];
 
-  useEffect(() => {
-    const defaultValue = listTypes.find((item) => item.value == defaultType);
-    setSelectedType(defaultValue);
-  }, [defaultType]);
-
   const handleSave = async (e) => {
     e.preventDefault();
-    const path = selectedType.value || "";
+    const path = selectedType || "";
     const newListId = await createList(path, title);
     if (newListId) {
       navigate(`/${path}/${newListId}`);
@@ -65,15 +60,20 @@ function CreateList({ defaultType }) {
         </div>
 
         <div className="modal-form-body">
-          <FormControl fullWidth size="small" sx={{ marginTop: "25px" }}>
+          <FormControl
+            required
+            fullWidth
+            size="small"
+            sx={{ marginTop: "25px" }}
+          >
             <InputLabel id="type-label">Lista típusa</InputLabel>
             <Select
               labelId="type-label"
               id="type"
-              value={selectedType ? selectedType.value : ""}
+              value={selectedType || ""}
               label="Lista típusa"
-              onChange={(selectedItem) => {
-                setSelectedType(selectedItem);
+              onChange={(e) => {
+                setSelectedType(e.target.value);
               }}
             >
               {listTypes.map((type, index) => (
