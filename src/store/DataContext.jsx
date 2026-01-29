@@ -138,17 +138,8 @@ export const DataContextProvider = ({ children }) => {
     everyItemHasDate = true,
     setChecked,
   }) => {
-    const orderByArray = order.map((item) =>
-      orderBy(item.name, item.direction || "asc"),
-    );
-    const filterArray = filter.map((item) =>
-      where(item.name, item.rel, item.value),
-    );
-    const collectionRef = collection(db, `${path}/${listId}/items`);
-    const q = query(collectionRef, ...orderByArray, or(...filterArray));
-
     return onSnapshot(
-      q,
+      getQueryForItemList(order, filter, path, listId),
       (snapShot) => {
         let data = snapShot.docs.map((doc) => ({
           ...doc.data(),
@@ -160,24 +151,10 @@ export const DataContextProvider = ({ children }) => {
           return;
         }
 
-        const itemsWithoutDate = everyItemHasDate
-          ? []
-          : data.filter((item) => !item.hasDate);
-        let itemsWithDate = everyItemHasDate
-          ? data
-          : data.filter((item) => item.hasDate);
-
-        itemsWithDate.forEach((item) => {
-          setNextDateTime(item);
-          setNextDate(item);
-          if (setChecked && item.isRecurring) {
-            item.checked = item.lastTimeCompleted == item.nextDateTime;
-          }
-        });
-
-        itemsWithDate = Object.groupBy(
-          itemsWithDate,
-          ({ nextDate }) => nextDate,
+        const { itemsWithDate, itemsWithoutDate } = setItems(
+          data,
+          everyItemHasDate,
+          setChecked,
         );
 
         setter(
@@ -194,6 +171,62 @@ export const DataContextProvider = ({ children }) => {
         });
       },
     );
+  };
+
+  const setItems = (data, everyItemHasDate, setChecked) => {
+    const itemsWithoutDate = everyItemHasDate
+      ? []
+      : data.filter((item) => !item.hasDate);
+
+    let itemsWithDate = everyItemHasDate
+      ? data
+      : data.filter((item) => item.hasDate);
+
+    itemsWithDate.forEach((item) => {
+      setNextDateTime(item);
+      setNextDate(item);
+
+      if (setChecked && item.isRecurring) {
+        item.checked = item.lastTimeCompleted == item.nextDateTime;
+      }
+    });
+
+    itemsWithDate = Object.groupBy(itemsWithDate, ({ nextDate }) => nextDate);
+
+    if (setChecked) {
+      Object.values(itemsWithDate).forEach((itemList) => {
+        sortByChecked(itemList);
+      });
+
+      sortByChecked(itemsWithoutDate);
+    }
+
+    return { itemsWithDate, itemsWithoutDate };
+  };
+
+  const getQueryForItemList = (order, filter, path, listId) => {
+    const orderByArray = order.map((item) =>
+      orderBy(item.name, item.direction || "asc"),
+    );
+    const filterArray = filter.map((item) =>
+      where(item.name, item.rel, item.value),
+    );
+    const collectionRef = collection(db, `${path}/${listId}/items`);
+    return query(collectionRef, ...orderByArray, or(...filterArray));
+  };
+
+  const sortByChecked = (itemList) => {
+    itemList.sort((a, b) => {
+      if (a.checked && !b.checked) {
+        return 1;
+      }
+
+      if (!a.checked && b.checked) {
+        return -1;
+      }
+
+      return b.addedAt - a.addedAt;
+    });
   };
 
   const deleteItem = async (path, listId, itemId) => {
