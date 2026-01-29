@@ -334,7 +334,39 @@ export const DataContextProvider = ({ children }) => {
       batch.set(docRef, item);
     });
 
-    await batch.commit();
+    let isSuccess = false;
+
+    await batch
+      .commit()
+      .then(() => (isSuccess = true))
+      .catch((error) =>
+        showAlert({
+          title: "Hiba",
+          text: error?.message || "Hiba történt a művelet során.",
+        }),
+      );
+  };
+
+  const getListsByType = (path, setter) => {
+    const collectionRef = collection(db, path);
+    const q = query(collectionRef, where("creatorId", "==", user?.uid || ""));
+    const getDataUnsub = onSnapshot(
+      q,
+      (snapShot) => {
+        const data = snapShot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+
+        setter(data);
+      },
+      (error) =>
+        showAlert({
+          title: "Hiba",
+          text: error?.message || "Hiba történt az adatok lekérése során.",
+        }),
+    );
+    return () => getDataUnsub();
   };
 
   const ctxValue = {
@@ -359,6 +391,8 @@ export const DataContextProvider = ({ children }) => {
     deleteList,
     deleteItemList,
     copyList,
+    getListsByType,
+    copyItems,
   };
 
   return <DataContext value={ctxValue}>{children}</DataContext>;

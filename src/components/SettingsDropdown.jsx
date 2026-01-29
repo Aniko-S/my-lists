@@ -6,6 +6,7 @@ import { Typography } from "@mui/material";
 import { useData } from "../store/DataContext";
 import DialogBody from "./DialogBody";
 import CopyListForm from "./CopyListForm";
+import ImportItemsForm from "./ImportItemsForm";
 
 function SettingsDropdown({ path, listId }) {
   const { showDialog, hideDialog, showModal, deleteList, deleteItemList } =
@@ -40,6 +41,13 @@ function SettingsDropdown({ path, listId }) {
     showModal({
       title: "Lista másolása",
       body: <CopyListForm path={path} listId={listId}></CopyListForm>,
+    });
+  };
+
+  const handleClickOnItemImport = () => {
+    showModal({
+      title: "Tételek importálása",
+      body: <ImportItemsForm path={path} listId={listId}></ImportItemsForm>,
     });
   };
 
@@ -83,6 +91,9 @@ function SettingsDropdown({ path, listId }) {
           </Dropdown.Item>
           <Dropdown.Item onClick={handleClickOnDeleteItems}>
             Kijelölt tételek törlése
+          </Dropdown.Item>
+          <Dropdown.Item onClick={handleClickOnItemImport}>
+            Tételek importálása
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
