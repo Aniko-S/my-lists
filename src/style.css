@@ -72,6 +72,10 @@ td .date, .item-date {
     font-size: 12px
 }
 
+.details-with-checkbox {
+    margin-left: 32px;
+}
+
 hr {
     display: block;
     height: 1px;

@@ -115,7 +115,9 @@ function TodoListTable({ path, listId }) {
                       ></Autorenew>
                     )}
 
-                    <div className="details">{item.details}</div>
+                    <div className="details details-with-checkbox">
+                      {item.details}
+                    </div>
                   </div>
                   <div className="col-3 text-right">
                     <Edit onClick={() => handleUpdateItem(item.id)}></Edit>
