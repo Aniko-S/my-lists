@@ -19,7 +19,7 @@ function TodoListItemForm({ id, onUnmount = () => {} }) {
     periodValue: 1,
   });
   const [itemId, setItemId] = useState();
-  const [date, setDate] = useState(dayjs(new Date().setHours(0, 0, 0, 0)));
+  const [date, setDate] = useState();
 
   const { setModalTitle, hideModal, createItem, getItemById, updateItem } =
     useData();
@@ -33,18 +33,20 @@ function TodoListItemForm({ id, onUnmount = () => {} }) {
     month: "Hónap",
     year: "Év",
   };
+  const defaultDate = dayjs(new Date().setHours(0, 0, 0, 0));
 
   useEffect(() => {
     if (id) {
       getItemById(path, listId, id, (data) => {
         setItem(data);
-        setDate(dayjs(data.dateTime));
+        setDate(data.hasDate ? dayjs(data.dateTime) : defaultDate);
       });
 
       setItemId(id);
       setModalTitle("Tétel módosítása");
     } else {
       setModalTitle("Új tétel létrehozása");
+      setDate(defaultDate);
     }
 
     return onUnmount;
