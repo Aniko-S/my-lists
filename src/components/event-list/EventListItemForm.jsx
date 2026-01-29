@@ -21,7 +21,7 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
   });
   const [itemId, setItemId] = useState();
   const [date, setDate] = useState(dayjs());
-  const [time, setTime] = useState(dayjs(new Date().setHours(0, 0, 0)));
+  const [time, setTime] = useState(dayjs(new Date().setHours(0, 0, 0, 0)));
 
   const { setModalTitle, hideModal, createItem, getItemById, updateItem } =
     useData();
@@ -56,7 +56,7 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
     const dateInDateFormat = new Date(date);
     const hours = new Date(time).getHours();
     const minutes = new Date(time).getMinutes();
-    dateInDateFormat.setHours(hours, minutes, 0);
+    dateInDateFormat.setHours(hours, minutes, 0, 0);
 
     item.dateTime = dateInDateFormat.getTime();
   };
@@ -84,7 +84,7 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
 
   const handleIsAllDayCheck = (e, item) => {
     setItem({ ...item, isAllDay: e.target.checked });
-    setTime(dayjs(new Date().setHours(0, 0, 0)));
+    setTime(dayjs(new Date().setHours(0, 0, 0, 0)));
   };
 
   return (
@@ -115,6 +115,15 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
             autoFocus
             value={item.name}
             onChange={(e) => setItem({ ...item, name: e.target.value })}
+          ></FormInput>
+
+          <FormInput
+            id="details"
+            label="Részletek"
+            multiline
+            rows={4}
+            value={item.details}
+            onChange={(e) => setItem({ ...item, details: e.target.value })}
           ></FormInput>
 
           <div className="my-3">
