@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useData } from "../../store/DataContext";
-import { Autorenew, Delete, Edit } from "@mui/icons-material";
+import { Autorenew, Delete, Edit, Warning } from "@mui/icons-material";
 import { Checkbox } from "@mui/material";
 import dayjs from "dayjs";
 import TodoListItemForm from "./TodoListItemForm";
@@ -29,6 +29,7 @@ function TodoListTable({ path, listId }) {
         { name: "hasDate", rel: "==", value: false },
         { name: "isRecurring", rel: "==", value: true },
         { name: "dateTime", rel: ">=", value: new Date().setHours(0, 0, 0, 0) },
+        { name: "checked", rel: "==", value: false },
       ],
       setter: (data) => {
         setItemList(data);
@@ -74,6 +75,10 @@ function TodoListTable({ path, listId }) {
     updateItem(path, listId, item.id, updatedData);
   };
 
+  const isPast = (date) => {
+    return date < new Date().setHours(0, 0, 0, 0);
+  };
+
   return (
     <>
       {dateList.map((date, index) => {
@@ -82,7 +87,7 @@ function TodoListTable({ path, listId }) {
             <div className="text-left">
               {date == "noDate" && <div>Dátum nélkül</div>}
               {date != "noDate" && (
-                <div>
+                <div className={isPast(date) ? "past-date" : ""}>
                   <span>{dayjs(Number(date)).format("YYYY.MM.DD.")}</span>
                   <span>
                     &nbsp;
@@ -90,6 +95,9 @@ function TodoListTable({ path, listId }) {
                       weekday: "long",
                     })}
                   </span>
+                  {isPast(date) && (
+                    <Warning color="warning" className="ml-2"></Warning>
+                  )}
                 </div>
               )}
             </div>

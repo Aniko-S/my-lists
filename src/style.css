@@ -99,3 +99,7 @@ hr {
 #settings-button, #add-item-button {
     height: 40px;
 }
+
+.past-date {
+    color: red;
+}

@@ -40,16 +40,25 @@ export const DataContextProvider = ({ children }) => {
     "other-list": "Egyéb",
   };
 
-  const setNextDateTime = (item) => {
+  const setNextDateTime = (item, setChecked) => {
     item.nextDateTime = new Date(item.dateTime).getTime();
 
-    if (!item.isRecurring) {
+    if (!item.isRecurring || (setChecked && !item.lastTimeCompleted)) {
       return;
     }
 
-    const today = new Date().setHours(0, 0, 0, 0);
+    if (item.lastTimeCompleted >= new Date().setHours(0, 0, 0, 0)) {
+      item.nextDateTime = new Date(item.lastTimeCompleted).getTime();
+      return;
+    }
 
-    while (item.nextDateTime < today) {
+    const getCondition = () => {
+      return setChecked
+        ? item.nextDateTime <= item.lastTimeCompleted
+        : item.nextDateTime < new Date().setHours(0, 0, 0, 0);
+    };
+
+    while (getCondition()) {
       let date = new Date(item.nextDateTime);
 
       switch (item.periodUnit) {
@@ -183,7 +192,7 @@ export const DataContextProvider = ({ children }) => {
       : data.filter((item) => item.hasDate);
 
     itemsWithDate.forEach((item) => {
-      setNextDateTime(item);
+      setNextDateTime(item, setChecked);
       setNextDate(item);
 
       if (setChecked && item.isRecurring) {
