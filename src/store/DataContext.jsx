@@ -480,6 +480,7 @@ export const DataContextProvider = ({ children }) => {
     showDialog,
     hideDialog,
     selectedGroup,
+    setSelectedGroup,
     getListById,
     setItemListSnapshot,
     deleteItem,

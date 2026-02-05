@@ -22,7 +22,8 @@ function MenuData() {
   const [otherLists, setOtherLists] = useState([]);
 
   const { user, handleSignOut } = useAuth();
-  const { showModal, hideModal, setIsMobileDrawerOpen } = useData();
+  const { showModal, hideModal, setIsMobileDrawerOpen, setSelectedGroup } =
+    useData();
 
   useEffect(() => {
     return getLists("shopping-list", setShoppingLists);
@@ -138,7 +139,10 @@ function MenuData() {
             key="today"
             component={Link}
             to="/today"
-            onClick={handleClickOnMenuItem}
+            onClick={() => {
+              handleClickOnMenuItem();
+              setSelectedGroup("today");
+            }}
           >
             <ListItemText primary="Tennivalók és események ma"></ListItemText>
           </ListItemButton>
