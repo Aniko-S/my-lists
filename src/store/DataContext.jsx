@@ -412,7 +412,7 @@ export const DataContextProvider = ({ children }) => {
     return () => getDataUnsub();
   };
 
-  const setItemListSnapshotForTodayEvents = async (setter) => {
+  const setItemListSnapshotForTodayEvents = (setter) => {
     let collectionRef = collection(db, "event-list");
     const q = query(collectionRef, where("creatorId", "==", user?.uid || ""));
     const getDataUnsub = onSnapshot(
@@ -433,6 +433,7 @@ export const DataContextProvider = ({ children }) => {
           text: error?.message || "Hiba történt az adatok lekérése során.",
         }),
     );
+
     return () => getDataUnsub();
   };
 

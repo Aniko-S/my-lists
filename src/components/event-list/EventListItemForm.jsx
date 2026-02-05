@@ -10,7 +10,7 @@ import DateSetter from "../DateSetter";
 import TimeSetter from "../TimeSetter";
 import FormInput from "../FormInput";
 
-function EventListItemForm({ id, onUnmount = () => {} }) {
+function EventListItemForm({ id, path, listId, onUnmount = () => {} }) {
   const [item, setItem] = useState({
     name: "",
     details: "",
@@ -26,9 +26,6 @@ function EventListItemForm({ id, onUnmount = () => {} }) {
   const { setModalTitle, hideModal, createItem, getItemById, updateItem } =
     useData();
 
-  const params = useParams();
-  const listId = params.id;
-  const path = "event-list";
   const unitList = {
     day: "Nap",
     week: "Hét",
