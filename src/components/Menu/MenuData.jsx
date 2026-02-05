@@ -75,7 +75,7 @@ function MenuData() {
       },
       (error) => {
         console.log(error);
-      }
+      },
     );
     return () => getDataUnsub();
   };
@@ -134,6 +134,15 @@ function MenuData() {
           </button>
         </div>
         <List>
+          <ListItemButton
+            key="today"
+            component={Link}
+            to="/today"
+            onClick={handleClickOnMenuItem}
+          >
+            <ListItemText primary="Tennivalók és események ma"></ListItemText>
+          </ListItemButton>
+
           {menuList.map((listGroup) => {
             return (
               <div key={listGroup.id}>

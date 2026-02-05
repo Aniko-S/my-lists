@@ -10,6 +10,7 @@ import {
   where,
   orderBy,
   or,
+  and,
   writeBatch,
   getDocs,
 } from "firebase/firestore";
@@ -411,6 +412,61 @@ export const DataContextProvider = ({ children }) => {
     return () => getDataUnsub();
   };
 
+  const setItemListSnapshotForTodayEvents = async (setter) => {
+    let collectionRef = collection(db, "event-list");
+    const q = query(collectionRef, where("creatorId", "==", user?.uid || ""));
+    const getDataUnsub = onSnapshot(
+      q,
+      async (snapShot) => {
+        const lists = snapShot.docs.map((doc) => ({
+          id: doc.id,
+          title: doc.data().title,
+        }));
+
+        let items = await getItemsFromLists(lists);
+
+        setter(items);
+      },
+      (error) =>
+        showAlert({
+          title: "Hiba",
+          text: error?.message || "Hiba történt az adatok lekérése során.",
+        }),
+    );
+    return () => getDataUnsub();
+  };
+
+  const getItemsFromLists = async (lists) => {
+    let items = [];
+
+    await Promise.all(
+      lists.map(async (list) => {
+        let collectionRef = collection(db, `event-list/${list.id}/items`);
+        let snapshot = await getDocs(
+          query(
+            collectionRef,
+            and(
+              where("dateTime", ">=", new Date().setHours(0, 0, 0, 0)),
+              where("dateTime", "<=", new Date().setHours(23, 59, 59, 59)),
+            ),
+          ),
+        );
+        items = items.concat(
+          snapshot.docs.map((doc) => {
+            return {
+              ...doc.data(),
+              id: doc.id,
+              listId: list.id,
+              listTitle: list.title,
+            };
+          }),
+        );
+      }),
+    );
+
+    return items;
+  };
+
   const ctxValue = {
     isMobileDrawerOpen,
     setIsMobileDrawerOpen,
@@ -435,6 +491,7 @@ export const DataContextProvider = ({ children }) => {
     copyList,
     getListsByType,
     copyItems,
+    setItemListSnapshotForTodayEvents,
   };
 
   return <DataContext value={ctxValue}>{children}</DataContext>;

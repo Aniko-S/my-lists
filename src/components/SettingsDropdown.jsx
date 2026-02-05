@@ -54,7 +54,7 @@ function SettingsDropdown({ path, listId }) {
   const handleDeleteList = async () => {
     const isDeleteSuccess = await deleteList(path, listId);
     if (isDeleteSuccess) {
-      navigate("/home");
+      navigate("/today");
     }
   };
 

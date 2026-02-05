@@ -8,7 +8,7 @@ import ShoppingList from "./components/shopping-list/ShoppingList";
 import TodoList from "./components/todo-list/TodoList";
 import EventList from "./components/event-list/EventList";
 import Menu from "./components/menu/Menu";
-import TodosEventsToday from "./components/TodosEventsToday";
+import TodosAndEventsToday from "./components/TodosAndEventsToday";
 import OtherList from "./components/other-list/OtherList";
 
 function App() {
@@ -19,10 +19,10 @@ function App() {
           <Router>
             <Routes>
               <Route
-                path="/home"
+                path="/today"
                 element={
                   <Menu>
-                    <TodosEventsToday></TodosEventsToday>
+                    <TodosAndEventsToday></TodosAndEventsToday>
                   </Menu>
                 }
               ></Route>
