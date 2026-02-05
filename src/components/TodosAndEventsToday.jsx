@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { useData } from "../store/DataContext";
-import { Autorenew, Delete, Edit } from "@mui/icons-material";
-import dayjs from "dayjs";
 import EventListTableRow from "./event-list/EventListTableRow";
 
 function TodosAndEventsToday() {
@@ -11,22 +9,23 @@ function TodosAndEventsToday() {
   const [dateList, setDateList] = useState([]);
   const { setItemListSnapshotForTodayEvents } = useData();
 
-  useEffect(() => {
-    const getDataUnsub = setItemListSnapshotForTodayEvents((data) =>
-      setItemList(data),
-    );
+  const setData = () =>
+    setItemListSnapshotForTodayEvents((data) => setItemList(data));
 
-    return () => getDataUnsub();
+  useEffect(() => {
+    setData();
   }, []);
 
   return (
     <>
+      <h2>Események</h2>
       {itemList.map((item, index) => {
         return (
           <EventListTableRow
             item={item}
             key={index}
             path="event-list"
+            afterChange={setData}
           ></EventListTableRow>
         );
       })}

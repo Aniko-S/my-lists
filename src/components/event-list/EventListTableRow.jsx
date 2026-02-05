@@ -4,17 +4,17 @@ import EventListItemForm from "./EventListItemForm";
 import DialogBody from "../DialogBody";
 import { useData } from "../../store/DataContext";
 
-function EventListTableRow({ item, path, listId }) {
+function EventListTableRow({ item, path, listId, afterChange = () => {} }) {
   const { showModal, showDialog, deleteItem } = useData();
 
   const handleUpdateItem = (id) => {
-    console.log(id);
     showModal({
       body: (
         <EventListItemForm
           id={id}
           path={path}
           listId={listId || item.listId}
+          onUnmount={afterChange}
         ></EventListItemForm>
       ),
     });
@@ -27,12 +27,16 @@ function EventListTableRow({ item, path, listId }) {
         body: (
           <DialogBody
             text="A tétel ismétlődő. Biztosan minden alkalmat törölni szeretne?"
-            onOk={() => deleteItem(path, listId || item.listId, item.id)}
+            onOk={() => {
+              deleteItem(path, listId || item.listId, item.id);
+              afterChange();
+            }}
           ></DialogBody>
         ),
       });
     } else {
       deleteItem(path, listId || item.listId, item.id);
+      afterChange();
     }
   };
 
@@ -52,6 +56,7 @@ function EventListTableRow({ item, path, listId }) {
             {!item.isAllDay ? dayjs(item.nextDateTime).format("HH:mm") : ""}
           </div>
           <div className="details">{item.details}</div>
+          <div className="details">{item.listTitle}</div>
         </div>
         <div className="col-3 text-right">
           <Edit onClick={() => handleUpdateItem(item.id)}></Edit>

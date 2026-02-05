@@ -412,29 +412,19 @@ export const DataContextProvider = ({ children }) => {
     return () => getDataUnsub();
   };
 
-  const setItemListSnapshotForTodayEvents = (setter) => {
+  const setItemListSnapshotForTodayEvents = async (setter) => {
     let collectionRef = collection(db, "event-list");
-    const q = query(collectionRef, where("creatorId", "==", user?.uid || ""));
-    const getDataUnsub = onSnapshot(
-      q,
-      async (snapShot) => {
-        const lists = snapShot.docs.map((doc) => ({
-          id: doc.id,
-          title: doc.data().title,
-        }));
-
-        let items = await getItemsFromLists(lists);
-
-        setter(items);
-      },
-      (error) =>
-        showAlert({
-          title: "Hiba",
-          text: error?.message || "Hiba történt az adatok lekérése során.",
-        }),
+    let snapShot = await getDocs(
+      query(collectionRef, where("creatorId", "==", user?.uid || "")),
     );
 
-    return () => getDataUnsub();
+    const lists = snapShot.docs.map((doc) => ({
+      id: doc.id,
+      title: doc.data().title,
+    }));
+
+    let items = await getItemsFromLists(lists);
+    setter(items);
   };
 
   const getItemsFromLists = async (lists) => {
