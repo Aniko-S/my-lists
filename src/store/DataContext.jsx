@@ -445,26 +445,36 @@ export const DataContextProvider = ({ children }) => {
         let snapshot = await getDocs(
           query(
             collectionRef,
-            and(
-              where("dateTime", ">=", new Date().setHours(0, 0, 0, 0)),
-              where("dateTime", "<=", new Date().setHours(23, 59, 59, 59)),
+            or(
+              where("isRecurring", "==", true),
+              and(
+                where("dateTime", ">=", new Date().setHours(0, 0, 0, 0)),
+                where("dateTime", "<=", new Date().setHours(23, 59, 59, 59)),
+              ),
             ),
           ),
         );
         items = items.concat(
           snapshot.docs.map((doc) => {
-            return {
+            let item = {
               ...doc.data(),
               id: doc.id,
               listId: list.id,
               listTitle: list.title,
             };
+
+            setNextDateTime(item);
+            setNextDate(item);
+
+            return item;
           }),
         );
       }),
     );
 
-    return items;
+    return items.filter(
+      (item) => item.nextDate == new Date().setHours(0, 0, 0, 0),
+    );
   };
 
   const ctxValue = {
