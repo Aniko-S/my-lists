@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { useData } from "../../store/DataContext";
-import { Autorenew, Delete, Edit, Warning } from "@mui/icons-material";
-import { Checkbox } from "@mui/material";
+import { Warning } from "@mui/icons-material";
 import dayjs from "dayjs";
-import TodoListItemForm from "./TodoListItemForm";
-import DialogBody from "../DialogBody";
+import TodoListTableRow from "./TodoListTableRow";
 
 function TodoListTable({ path, listId }) {
   const [itemList, setItemList] = useState({});
@@ -48,33 +46,6 @@ function TodoListTable({ path, listId }) {
     return () => getDataUnsub();
   }, [listId]);
 
-  const handleUpdateItem = (id) => {
-    showModal({ body: <TodoListItemForm id={id}></TodoListItemForm> });
-  };
-
-  const handleDeleteItem = (item) => {
-    if (item.isRecurring) {
-      showDialog({
-        title: "Tétel törlése",
-        body: (
-          <DialogBody
-            text="A tétel ismétlődő. Biztosan minden alkalmat törölni szeretne?"
-            onOk={() => deleteItem(path, listId, item.id)}
-          ></DialogBody>
-        ),
-      });
-    } else {
-      deleteItem(path, listId, item.id);
-    }
-  };
-
-  const handleCheck = (event, item) => {
-    const updatedData = !item.isRecurring
-      ? { checked: event.target.checked }
-      : { lastTimeCompleted: event.target.checked ? item.nextDateTime : null };
-    updateItem(path, listId, item.id, updatedData);
-  };
-
   const isPast = (date) => {
     return date < new Date().setHours(0, 0, 0, 0);
   };
@@ -105,33 +76,12 @@ function TodoListTable({ path, listId }) {
 
             {itemList[date].map((item, index) => {
               return (
-                <div className="d-flex mb-3 list-row" key={index}>
-                  <div className="col-9 text-left ml-2">
-                    <Checkbox
-                      color="success"
-                      checked={item.checked}
-                      id={item.id}
-                      onChange={(e) => handleCheck(e, item)}
-                      className="p-0 mr-2"
-                    ></Checkbox>
-                    <span className={"name" + (item.checked ? " checked" : "")}>
-                      {item.name}
-                    </span>
-                    {item.isRecurring && (
-                      <Autorenew
-                        style={{ fontSize: "15px", marginBottom: "8px" }}
-                      ></Autorenew>
-                    )}
-
-                    <div className="details details-with-checkbox">
-                      {item.details}
-                    </div>
-                  </div>
-                  <div className="col-3 text-right">
-                    <Edit onClick={() => handleUpdateItem(item.id)}></Edit>
-                    <Delete onClick={() => handleDeleteItem(item)}></Delete>
-                  </div>
-                </div>
+                <TodoListTableRow
+                  key={index}
+                  item={item}
+                  path={path}
+                  listId={listId}
+                ></TodoListTableRow>
               );
             })}
           </div>
