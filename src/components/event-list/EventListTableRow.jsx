@@ -1,11 +1,13 @@
 import { Autorenew, Delete, Edit } from "@mui/icons-material";
 import dayjs from "dayjs";
+import { useNavigate } from "react-router";
 import EventListItemForm from "./EventListItemForm";
 import DialogBody from "../DialogBody";
 import { useData } from "../../store/DataContext";
 
 function EventListTableRow({ item, path, listId, afterChange = () => {} }) {
   const { showModal, showDialog, deleteItem } = useData();
+  const navigate = useNavigate();
 
   const handleUpdateItem = (id) => {
     showModal({
@@ -56,7 +58,12 @@ function EventListTableRow({ item, path, listId, afterChange = () => {} }) {
             {!item.isAllDay ? dayjs(item.nextDateTime).format("HH:mm") : ""}
           </div>
           <div className="details">{item.details}</div>
-          <div className="details">{item.listTitle}</div>
+          <div
+            className="details"
+            onClick={() => navigate(`/${path}/${item.listId}`)}
+          >
+            {item.listTitle}
+          </div>
         </div>
         <div className="col-3 text-right">
           <Edit onClick={() => handleUpdateItem(item.id)}></Edit>

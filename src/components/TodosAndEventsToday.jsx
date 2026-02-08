@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
+import dayjs from "dayjs";
 import { useData } from "../store/DataContext";
 import EventListTableRow from "./event-list/EventListTableRow";
 import TodoListTableRow from "./todo-list/TodoListTableRow";
 import { useAuth } from "../store/AuthContext";
-import dayjs from "dayjs";
 
 function TodosAndEventsToday() {
   const [eventList, setEventList] = useState([]);
