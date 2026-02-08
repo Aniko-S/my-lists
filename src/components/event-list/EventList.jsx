@@ -23,7 +23,9 @@ function EventList() {
   }, [listId]);
 
   const handleNewItem = () => {
-    showModal({ body: <EventListItemForm></EventListItemForm> });
+    showModal({
+      body: <EventListItemForm path={path} listId={listId}></EventListItemForm>,
+    });
   };
 
   return (

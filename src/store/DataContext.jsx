@@ -239,6 +239,28 @@ export const DataContextProvider = ({ children }) => {
     });
   };
 
+  const sortByNextDateTime = (itemList) => {
+    itemList.sort((a, b) => a.nextDateTime - b.nextDateTime);
+  };
+
+  const sortByNextDateTimeAndChecked = (itemList) => {
+    itemList.sort((a, b) => {
+      if (a.nextDateTime == b.nextDateTime) {
+        if (a.checked && !b.checked) {
+          return 1;
+        }
+
+        if (!a.checked && b.checked) {
+          return -1;
+        }
+
+        return b.addedAt - a.addedAt;
+      }
+
+      return a.nextDateTime - b.nextDateTime;
+    });
+  };
+
   const deleteItem = async (path, listId, itemId) => {
     const docRef = doc(collection(db, `${path}/${listId}/items`), itemId);
 
@@ -486,10 +508,19 @@ export const DataContextProvider = ({ children }) => {
 
             setNextDateTime(item, setChecked);
             setNextDate(item);
+            if (setChecked && item.isRecurring) {
+              item.checked = item.lastTimeCompleted == item.nextDateTime;
+            }
 
             return item;
           }),
         );
+
+        if (setChecked) {
+          sortByNextDateTimeAndChecked(items);
+        } else {
+          sortByNextDateTime(items);
+        }
       }),
     );
 

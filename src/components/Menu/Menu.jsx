@@ -54,19 +54,7 @@ function Menu({ children }) {
               <MenuIcon></MenuIcon>
             </IconButton>
             <Typography variant="h5" noWrap component="div">
-              {selectedGroup == "today" ? (
-                <div>
-                  <span>{new Date().toLocaleDateString()}</span>
-                  <span>
-                    &nbsp;
-                    {new Date().toLocaleDateString("hu", {
-                      weekday: "long",
-                    })}
-                  </span>
-                </div>
-              ) : (
-                selectedGroup
-              )}
+              {selectedGroup}
             </Typography>
           </Toolbar>
         </AppBar>

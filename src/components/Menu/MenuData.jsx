@@ -149,7 +149,6 @@ function MenuData() {
             to="/today"
             onClick={() => {
               handleClickOnMenuItem();
-              setSelectedGroup("today");
             }}
           >
             <ListItemText primary="Tennivalók és események ma"></ListItemText>
