@@ -3,8 +3,15 @@ import { Checkbox } from "@mui/material";
 import DialogBody from "../DialogBody";
 import TodoListItemForm from "./TodoListItemForm";
 import { useData } from "../../store/DataContext";
+import dayjs from "dayjs";
 
-function TodoListTableRow({ item, path, listId, afterChange = () => {} }) {
+function TodoListTableRow({
+  item,
+  path,
+  listId,
+  showPastDate,
+  afterChange = () => {},
+}) {
   const { showModal, showDialog, deleteItem, updateItem } = useData();
 
   const handleCheck = (event, item) => {
@@ -79,6 +86,12 @@ function TodoListTableRow({ item, path, listId, afterChange = () => {} }) {
           )}
 
           <div className="details details-with-checkbox">{item.details}</div>
+          {showPastDate && isPast(item.nextDateTime) && (
+            <div className="item-date details-with-checkbox">
+              {dayjs(Number(item.nextDateTime)).format("YYYY.MM.DD.")}
+            </div>
+          )}
+          <div className="details details-with-checkbox">{item.listTitle}</div>
         </div>
         <div className="col-3 text-right">
           <Edit onClick={() => handleUpdateItem(item.id)}></Edit>

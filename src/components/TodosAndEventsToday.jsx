@@ -52,6 +52,7 @@ function TodosAndEventsToday() {
             path="todo-list"
             key={index}
             afterChange={setData}
+            showPastDate={true}
           ></TodoListTableRow>
         );
       })}
