@@ -26,19 +26,27 @@ function MenuData() {
     useData();
 
   useEffect(() => {
-    return getLists("shopping-list", setShoppingLists);
+    if (user) {
+      return getLists("shopping-list", setShoppingLists);
+    }
   }, [user]);
 
   useEffect(() => {
-    return getLists("todo-list", setTodoLists);
+    if (user) {
+      return getLists("todo-list", setTodoLists);
+    }
   }, [user]);
 
   useEffect(() => {
-    return getLists("event-list", setEventLists);
+    if (user) {
+      return getLists("event-list", setEventLists);
+    }
   }, [user]);
 
   useEffect(() => {
-    return getLists("other-list", setOtherLists);
+    if (user) {
+      return getLists("other-list", setOtherLists);
+    }
   }, [user]);
 
   const navigate = useNavigate();

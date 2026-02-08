@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { useData } from "../store/DataContext";
 import EventListTableRow from "./event-list/EventListTableRow";
 import TodoListTableRow from "./todo-list/TodoListTableRow";
+import { useAuth } from "../store/AuthContext";
 
 function TodosAndEventsToday() {
   const [eventList, setEventList] = useState([]);
   const [todoList, setTodoList] = useState([]);
   const { setItemListSnapshotForToday } = useData();
+  const { user } = useAuth();
 
   const setData = () => {
     setItemListSnapshotForToday({
@@ -20,14 +22,15 @@ function TodosAndEventsToday() {
       setter: (data) => {
         data.sort((a, b) => a.nextDateTime - b.nextDateTime);
         setTodoList(data);
-        console.log(data);
       },
     });
   };
 
   useEffect(() => {
-    setData();
-  }, []);
+    if (user) {
+      setData();
+    }
+  }, [user]);
 
   return (
     <>
