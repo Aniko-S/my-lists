@@ -1,5 +1,6 @@
 import { Autorenew, Delete, Edit } from "@mui/icons-material";
 import { Checkbox } from "@mui/material";
+import { useNavigate } from "react-router";
 import DialogBody from "../DialogBody";
 import TodoListItemForm from "./TodoListItemForm";
 import { useData } from "../../store/DataContext";
@@ -13,13 +14,31 @@ function TodoListTableRow({
   afterChange = () => {},
 }) {
   const { showModal, showDialog, deleteItem, updateItem } = useData();
+  const navigate = useNavigate();
 
   const handleCheck = (event, item) => {
     const updatedData = !item.isRecurring
       ? { checked: event.target.checked }
       : { lastTimeCompleted: event.target.checked ? item.nextDateTime : null };
-    updateItem(path, listId || item.listId, item.id, updatedData);
-    afterChange();
+
+    if (isPast(item.nextDateTime)) {
+      showDialog({
+        title: "Tétel kijelölése",
+        body: (
+          <DialogBody
+            text="A teendő múltbéli, a kijelöléssel eltűnik a listából. Biztosan szeretné kijelölni?"
+            okText="Kijelölés"
+            onOk={() => {
+              updateItem(path, listId || item.listId, item.id, updatedData);
+              afterChange();
+            }}
+          ></DialogBody>
+        ),
+      });
+    } else {
+      updateItem(path, listId || item.listId, item.id, updatedData);
+      afterChange();
+    }
   };
 
   const handleUpdateItem = (id) => {
@@ -91,7 +110,12 @@ function TodoListTableRow({
               {dayjs(Number(item.nextDateTime)).format("YYYY.MM.DD.")}
             </div>
           )}
-          <div className="details details-with-checkbox">{item.listTitle}</div>
+          <div
+            className="details details-with-checkbox"
+            onClick={() => navigate(`/${path}/${item.listId}`)}
+          >
+            {item.listTitle}
+          </div>
         </div>
         <div className="col-3 text-right">
           <Edit onClick={() => handleUpdateItem(item.id)}></Edit>

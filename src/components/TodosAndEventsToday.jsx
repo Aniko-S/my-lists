@@ -6,7 +6,6 @@ import TodoListTableRow from "./todo-list/TodoListTableRow";
 function TodosAndEventsToday() {
   const [eventList, setEventList] = useState([]);
   const [todoList, setTodoList] = useState([]);
-  const [order, setOrder] = useState([{ name: "dateTime", direction: "asc" }]);
   const { setItemListSnapshotForToday } = useData();
 
   const setData = () => {
@@ -32,30 +31,34 @@ function TodosAndEventsToday() {
 
   return (
     <>
-      <h2>Események</h2>
-      {eventList.map((item, index) => {
-        return (
-          <EventListTableRow
-            item={item}
-            key={index}
-            path="event-list"
-            afterChange={setData}
-          ></EventListTableRow>
-        );
-      })}
+      <div className="page">
+        <div className="text-left mt-3">Események</div>
+        <hr></hr>
+        {eventList.map((item, index) => {
+          return (
+            <EventListTableRow
+              item={item}
+              key={index}
+              path="event-list"
+              afterChange={setData}
+            ></EventListTableRow>
+          );
+        })}
 
-      <h2>Teendők</h2>
-      {todoList.map((item, index) => {
-        return (
-          <TodoListTableRow
-            item={item}
-            path="todo-list"
-            key={index}
-            afterChange={setData}
-            showPastDate={true}
-          ></TodoListTableRow>
-        );
-      })}
+        <div className="text-left mt-3">Teendők</div>
+        <hr></hr>
+        {todoList.map((item, index) => {
+          return (
+            <TodoListTableRow
+              item={item}
+              path="todo-list"
+              key={index}
+              afterChange={setData}
+              showPastDate={true}
+            ></TodoListTableRow>
+          );
+        })}
+      </div>
     </>
   );
 }

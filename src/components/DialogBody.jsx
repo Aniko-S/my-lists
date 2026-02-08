@@ -1,6 +1,6 @@
 import { useData } from "../store/DataContext";
 
-function DialogBody({ text, onOk }) {
+function DialogBody({ text, onOk, okText = "Törlés" }) {
   const { hideDialog } = useData();
 
   return (
@@ -17,7 +17,7 @@ function DialogBody({ text, onOk }) {
             hideDialog();
           }}
         >
-          Törlés
+          {okText}
         </button>
       </div>
     </>
