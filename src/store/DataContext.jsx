@@ -412,8 +412,13 @@ export const DataContextProvider = ({ children }) => {
     return () => getDataUnsub();
   };
 
-  const setItemListSnapshotForTodayEvents = async (setter) => {
-    let collectionRef = collection(db, "event-list");
+  const setItemListSnapshotForToday = async ({
+    path,
+    getItemsFromPast,
+    setChecked,
+    setter,
+  }) => {
+    let collectionRef = collection(db, path);
     let snapShot = await getDocs(
       query(collectionRef, where("creatorId", "==", user?.uid || "")),
     );
@@ -423,28 +428,53 @@ export const DataContextProvider = ({ children }) => {
       title: doc.data().title,
     }));
 
-    let items = await getItemsFromLists(lists);
+    let items = await getItemsFromLists({
+      path,
+      lists,
+      getItemsFromPast,
+      setChecked,
+    });
     setter(items);
   };
 
-  const getItemsFromLists = async (lists) => {
+  const getItemsFromLists = async ({
+    path,
+    lists,
+    getItemsFromPast,
+    setChecked,
+  }) => {
     let items = [];
 
     await Promise.all(
       lists.map(async (list) => {
-        let collectionRef = collection(db, `event-list/${list.id}/items`);
-        let snapshot = await getDocs(
-          query(
-            collectionRef,
-            or(
-              where("isRecurring", "==", true),
-              and(
-                where("dateTime", ">=", new Date().setHours(0, 0, 0, 0)),
-                where("dateTime", "<=", new Date().setHours(23, 59, 59, 59)),
+        let collectionRef = collection(db, `${path}/${list.id}/items`);
+        const q = getItemsFromPast
+          ? query(
+              collectionRef,
+              or(
+                where("isRecurring", "==", true),
+                and(
+                  where("dateTime", ">=", new Date().setHours(0, 0, 0, 0)),
+                  where("dateTime", "<=", new Date().setHours(23, 59, 59, 59)),
+                ),
+                and(
+                  where("dateTime", "<", new Date().setHours(0, 0, 0, 0)),
+                  where("checked", "==", false),
+                ),
               ),
-            ),
-          ),
-        );
+            )
+          : query(
+              collectionRef,
+              or(
+                where("isRecurring", "==", true),
+                and(
+                  where("dateTime", ">=", new Date().setHours(0, 0, 0, 0)),
+                  where("dateTime", "<=", new Date().setHours(23, 59, 59, 59)),
+                ),
+              ),
+            );
+
+        let snapshot = await getDocs(q);
         items = items.concat(
           snapshot.docs.map((doc) => {
             let item = {
@@ -454,7 +484,7 @@ export const DataContextProvider = ({ children }) => {
               listTitle: list.title,
             };
 
-            setNextDateTime(item);
+            setNextDateTime(item, setChecked);
             setNextDate(item);
 
             return item;
@@ -463,9 +493,11 @@ export const DataContextProvider = ({ children }) => {
       }),
     );
 
-    return items.filter(
-      (item) => item.nextDate == new Date().setHours(0, 0, 0, 0),
-    );
+    return getItemsFromPast
+      ? items.filter((item) => item.nextDate <= new Date().setHours(0, 0, 0, 0))
+      : items.filter(
+          (item) => item.nextDate == new Date().setHours(0, 0, 0, 0),
+        );
   };
 
   const ctxValue = {
@@ -493,7 +525,7 @@ export const DataContextProvider = ({ children }) => {
     copyList,
     getListsByType,
     copyItems,
-    setItemListSnapshotForTodayEvents,
+    setItemListSnapshotForToday,
   };
 
   return <DataContext value={ctxValue}>{children}</DataContext>;

@@ -9,7 +9,7 @@ import { useData } from "../../store/DataContext";
 import DateSetter from "../DateSetter";
 import FormInput from "../FormInput";
 
-function TodoListItemForm({ id, onUnmount = () => {} }) {
+function TodoListItemForm({ id, path, listId, onUnmount = () => {} }) {
   const [item, setItem] = useState({
     name: "",
     details: "",
@@ -24,9 +24,6 @@ function TodoListItemForm({ id, onUnmount = () => {} }) {
   const { setModalTitle, hideModal, createItem, getItemById, updateItem } =
     useData();
 
-  const params = useParams();
-  const listId = params.id;
-  const path = "todo-list";
   const unitList = {
     day: "Nap",
     week: "Hét",

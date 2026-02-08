@@ -23,7 +23,9 @@ function TodoList() {
   }, [listId]);
 
   const handleNewItem = () => {
-    showModal({ body: <TodoListItemForm></TodoListItemForm> });
+    showModal({
+      body: <TodoListItemForm path={path} listId={listId}></TodoListItemForm>,
+    });
   };
 
   return (

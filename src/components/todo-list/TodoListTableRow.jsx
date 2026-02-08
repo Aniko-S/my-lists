@@ -4,18 +4,28 @@ import DialogBody from "../DialogBody";
 import TodoListItemForm from "./TodoListItemForm";
 import { useData } from "../../store/DataContext";
 
-function TodoListTableRow({ item, path, listId }) {
+function TodoListTableRow({ item, path, listId, afterChange = () => {} }) {
   const { showModal, showDialog, deleteItem, updateItem } = useData();
 
   const handleCheck = (event, item) => {
     const updatedData = !item.isRecurring
       ? { checked: event.target.checked }
       : { lastTimeCompleted: event.target.checked ? item.nextDateTime : null };
-    updateItem(path, listId, item.id, updatedData);
+    updateItem(path, listId || item.listId, item.id, updatedData);
+    afterChange();
   };
 
   const handleUpdateItem = (id) => {
-    showModal({ body: <TodoListItemForm id={id}></TodoListItemForm> });
+    showModal({
+      body: (
+        <TodoListItemForm
+          id={id}
+          path={path}
+          listId={listId || item.listId}
+          onUnmount={afterChange}
+        ></TodoListItemForm>
+      ),
+    });
   };
 
   const handleDeleteItem = (item) => {
@@ -25,13 +35,21 @@ function TodoListTableRow({ item, path, listId }) {
         body: (
           <DialogBody
             text="A tétel ismétlődő. Biztosan minden alkalmat törölni szeretne?"
-            onOk={() => deleteItem(path, listId, item.id)}
+            onOk={() => {
+              deleteItem(path, listId || item.listId, item.id);
+              afterChange();
+            }}
           ></DialogBody>
         ),
       });
     } else {
-      deleteItem(path, listId, item.id);
+      deleteItem(path, listId || item.listId, item.id);
+      afterChange();
     }
+  };
+
+  const isPast = (date) => {
+    return date < new Date().setHours(0, 0, 0, 0);
   };
 
   return (
@@ -45,7 +63,13 @@ function TodoListTableRow({ item, path, listId }) {
             onChange={(e) => handleCheck(e, item)}
             className="p-0 mr-2"
           ></Checkbox>
-          <span className={"name" + (item.checked ? " checked" : "")}>
+          <span
+            className={
+              "name" +
+              (item.checked ? " checked" : "") +
+              (isPast(item.nextDateTime) ? " past-date" : "")
+            }
+          >
             {item.name}
           </span>
           {item.isRecurring && (
